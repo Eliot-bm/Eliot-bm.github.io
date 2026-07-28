@@ -1,0 +1,84 @@
+# Destination : .github/workflows/publish.yml
+#
+# Prérequis, une seule fois : Settings → Pages → Build and deployment → Source = "GitHub Actions".
+# Aucune branche gh-pages n'est créée. Aucun `quarto publish` local n'est nécessaire.
+#
+# Ce workflow n'installe NI R NI Python. Il suppose `freeze: true` dans _quarto.yml et un
+# répertoire _freeze/ commité. Voir CLAUDE.md § 3.
+
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Rebuild hebdomadaire (lundi 06:00 UTC). Objectif : découvrir un build cassé ou un lien mort
+    # un lundi matin, pas la semaine où un comité de recrutement visite le site.
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+# Un déploiement à la fois. cancel-in-progress reste false : on ne veut pas interrompre
+# un déploiement Pages en cours, ce qui laisserait le site dans un état intermédiaire.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        # Sans `version:`, la dernière release stable est installée.
+        # À épingler dès que le site est en vitrine job market :
+        #   with:
+        #     version: "1.7.32"
+        # Coût de ne pas épingler : une release Quarto peut modifier un rendu sans que tu pousses
+        # quoi que ce soit. Coût d'épingler : tu dois bumper à la main. Épingle en octobre.
+
+      - name: Render
+        run: quarto render
+
+      - name: Sanity check
+        # Garde-fou minimal : un rendu qui "réussit" mais ne produit pas de page d'accueil
+        # est un échec silencieux. Mieux vaut casser le build que déployer un site vide.
+        run: |
+          test -f _site/index.html || { echo "::error::_site/index.html absent"; exit 1; }
+          echo "Pages HTML générées : $(find _site -name '*.html' | wc -l)"
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Link check
+        # Non bloquant : les liens externes tombent pour des raisons qui ne te concernent pas
+        # (rate limiting, Cloudflare, sites universitaires en maintenance). Le but est de te
+        # donner un rapport, pas de te bloquer. Supprime ce bloc s'il devient du bruit.
+        continue-on-error: true
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --max-concurrency 4 --accept 200,206,403,429 '_site/**/*.html'
+          fail: false
