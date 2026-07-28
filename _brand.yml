@@ -24,12 +24,13 @@ color:
     olive:   "#5C7A47"   # authentique #00AA00
     umber:   "#7B4B28"   # authentique #654321
     ink:     "#1A1A1A"
+    paper:   "#EDE0C8"   # le carton des planches de 1900
 
   # -- Roles semantiques : ce que Quarto applique reellement ---------------
   # Note : background reste blanc. Le creme n'arrive que dans les callouts
   # et les figures, sinon le site glisse vers le pastiche vintage.
   foreground: ink
-  background: white   # jamais de creme sur toute une page
+  background: paper
   primary: crimson
   secondary: indigo
   info: indigo
