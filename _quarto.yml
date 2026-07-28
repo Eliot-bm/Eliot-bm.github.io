@@ -45,4 +45,5 @@ execute:
   # auto = re-execute le code SEULEMENT si le .qmd a change.
   # Indispensable : sans ca, GitHub ne pourrait pas construire le site
   # (il n'a ni ton R, ni tes donnees CASD).
-  freeze: auto
+  freeze: true
+  
