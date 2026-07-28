@@ -1,0 +1,88 @@
+---
+title: "Curriculum Vitae"
+---
+
+**Eliot Bochet-Merand**\
+PhD candidate in Economics --- Paris Nanterre University, EconomiX\
+[ebochetm@parisnanterre.fr](mailto:ebochetm@parisnanterre.fr)
+
+## Research interests
+
+Labour economics; economics of immigration; technical change and automation;
+applied microeconometrics
+
+## Education
+
+**PhD in Economics**, Paris Nanterre University, EconomiX, 2024--present
+: Thesis: *Technical change, human capital and immigration*. Supervisor: Lionel Ragot.
+
+**MSc in Macroeconometrics**, Paris Nanterre University, 2022--2024
+: Thesis: *Green strategies of European companies*.
+
+**MSc in Philosophy of Economics**, Paris 1 Panthéon-Sorbonne University, 2019
+: Thesis: *Philosophical and historical investigations on Samuelson's expected utility concept*.
+
+**BSc in Economics**, Lyon II University, 2016
+
+## Teaching
+
+*Graduate --- Paris Nanterre University*
+
+**Growth theory** --- MSc in Environmental, Energy and Transport Economics, 2024--2027 (3 semesters)
+
+*Undergraduate --- Paris Nanterre University*
+
+**Game theory** --- BSc in Economics, 2026--2027 (1 semester)
+
+**Growth theory** --- BSc in Economics, 2025--2026 (1 semester)
+
+**Microeconomics** --- BSc in Economics, 2025--2026 (1 semester)
+
+**Macroeconomics and policy** --- BSc in Economics, 2024--2025 (1 semester)
+
+**Introduction to economics** --- BBA, 2024--2025 (1 semester)
+
+*Secondary level*
+
+**Private tutoring**, Alveus, 2022--2024
+: All subjects, from *sixième* to *terminale*.
+
+## Awards and honours
+
+**Econometric Games**, University of Amsterdam, 2024
+: Member of the Paris Nanterre University team
+
+## Professional experience
+
+**Intern**, *Entendez-vous l'éco ?*, France Culture (Radio France), 2019
+: Produced one weekly episode: identified and booked academic guests, wrote the
+  presenter's running order structuring the hour, sourced archive audio, and
+  built the episode's web page.
+
+**Receptionist**, Penelope Company, 2020--2022
+
+<!-- Une ligne, sans commentaire ni langage de competences. Deux ans de
+     travail salarie ne posent probleme a personne ; c'est l'habillage
+     defensif qui attire l'oeil. -->
+
+## Additional training
+
+**Summer School in Immigration Economics**, Paris School of Economics, 2026
+
+## Skills
+
+**Software.** R, Python, Quarto.
+
+**Languages.** French (native), English (fluent).
+
+<!-- ------------------------------------------------------------------------
+     A REMETTRE le jour ou il y a une ligne reelle a ecrire, pas avant :
+
+     ## Working papers
+     ## Work in progress
+     ## Presentations
+     ## References
+
+     Et une rubrique "Media and public engagement" le jour ou le blog et les
+     videos tournent : France Culture en sera la premiere ligne.
+------------------------------------------------------------------------ -->

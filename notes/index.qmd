@@ -1,0 +1,15 @@
+---
+title: "Notes"
+listing:
+  contents: posts
+  type: default
+  sort: "date desc"
+  fields: [date, title, subtitle, categories, reading-time]
+  categories: true
+  feed: true
+page-layout: full
+---
+
+Essays and replications. Each one comes with the code, and most come with a
+video. Replications rerun a canonical paper in the field and report what turns
+up, including when nothing does.

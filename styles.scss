@@ -1,0 +1,99 @@
+/*-- scss:defaults --*/
+
+// Rappel des couleurs cote SCSS (Quarto les expose depuis _brand.yml,
+// on les redeclare pour pouvoir s'en servir dans les regles ci-dessous).
+// INTERFACE : versions adoucies (chrome du site, liens, filets)
+$dubois-crimson: #C8102E;
+$dubois-gold:    #E8A33D;
+$dubois-indigo:  #1E4C7C;
+$dubois-olive:   #5C7A47;
+$dubois-umber:   #7B4B28;
+$dubois-ink:     #1A1A1A;
+
+// FIGURES : valeurs authentiques documentees (planches de 1900)
+$plate-tan:      #D2B48C;   // le fond reel des planches
+$plate-crimson:  #DC143C;
+$plate-gold:     #FFD700;
+$plate-blue:     #4682B4;
+$plate-green:    #00AA00;
+$plate-brown:    #654321;
+
+/*-- scss:rules --*/
+
+// --- Titres : capitales espacees, facon planche dessinee a la main -------
+// Le seul geste vraiment "Du Bois" de la typo. Reserve aux h1/h2 pour
+// que l'effet reste un accent et non un tic.
+h1, h2 {
+  letter-spacing: 0.055em;
+  text-transform: none;
+}
+
+// --- Filet crimson sous les titres de section ---------------------------
+// Structure porteuse de sens : marque la coupure, ne decore pas.
+h2 {
+  border-bottom: 2px solid $dubois-crimson;
+  padding-bottom: 0.3rem;
+  margin-top: 2.5rem;
+}
+
+// --- La planche : SEUL endroit ou la palette authentique apparait -------
+// Zone "figure", donc registre sature : fond tan reel des planches de 1900.
+// Usage dans un .qmd : ::: {.data-plate} ... :::
+.data-plate {
+  background-color: $plate-tan;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border-radius: 0;   // angles vifs : c'est une planche, pas une carte
+
+  figcaption, .caption {
+    font-family: Jost, sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: $plate-brown;
+  }
+}
+
+// --- Liens : souligne discret, crimson au survol ------------------------
+a {
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+}
+
+// --- Listings (Research / Teaching / Notes) -----------------------------
+// Titres des entrees en Jost pour distinguer la liste du corps de texte.
+.quarto-listing .listing-title {
+  font-family: Jost, sans-serif;
+  font-weight: 500;
+}
+
+.quarto-listing .listing-date,
+.quarto-listing .listing-categories {
+  font-family: Jost, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+// --- Badges de categorie : les 5 couleurs, pas du gris ------------------
+.quarto-category {
+  background-color: transparent;
+  border: 1px solid $dubois-indigo;
+  color: $dubois-indigo;
+  border-radius: 0;
+  padding: 0.1rem 0.5rem;
+}
+
+// --- Bloc "News" de la home --------------------------------------------
+.news-item {
+  border-left: 2px solid $dubois-gold;
+  padding-left: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+// --- Lisibilite : largeur de ligne bornee sur les textes longs ----------
+// 70 caracteres environ. Non negociable pour un abstract ou un essai.
+main {
+  p, ul, ol {
+    max-width: 34rem;
+  }
+}

@@ -1,0 +1,20 @@
+---
+title: "Research"
+listing:
+  contents: "*.qmd"
+  type: default
+  sort: "date desc"
+  fields: [title, subtitle, categories, date]
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+---
+
+Working papers and work in progress. Each paper page carries the abstract, the
+PDF, a two-minute video abstract, and whatever code can be released.
+
+On data access: parts of this work use French administrative data accessed
+through the CASD. The microdata cannot leave the enclave, but the full pipeline
+and a synthetic data generator that reproduces the file structure are published
+so the analysis can be audited end to end.

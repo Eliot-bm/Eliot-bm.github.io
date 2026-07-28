@@ -1,16 +1,233 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "EliotBM.github.io",
+    "objectID": "teaching/index.html",
+    "href": "teaching/index.html",
+    "title": "Teaching",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Course pages gather the slides, the problem sets, and the video lectures in one place. Videos are hosted on YouTube; the slides are built in Quarto and open in the browser.\n\n\n\n\n\n\n\n\n\n\n\nEconometrics\n\n\nL3, Universite XXX, 2026-2027\n\n\n\neconometrics\n\nundergraduate\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "research/technical-change-immigration.html",
+    "href": "research/technical-change-immigration.html",
+    "title": "Technical change and the wage effects of immigration",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "[Un paragraphe. Question, donnees, strategie d’identification, resultat principal, avec un chiffre. Pas de “we investigate the relationship between” : dis ce que tu trouves.]"
+  },
+  {
+    "objectID": "research/technical-change-immigration.html#abstract",
+    "href": "research/technical-change-immigration.html#abstract",
+    "title": "Technical change and the wage effects of immigration",
+    "section": "",
+    "text": "[Un paragraphe. Question, donnees, strategie d’identification, resultat principal, avec un chiffre. Pas de “we investigate the relationship between” : dis ce que tu trouves.]"
+  },
+  {
+    "objectID": "research/technical-change-immigration.html#video-abstract",
+    "href": "research/technical-change-immigration.html#video-abstract",
+    "title": "Technical change and the wage effects of immigration",
+    "section": "Video abstract",
+    "text": "Video abstract"
+  },
+  {
+    "objectID": "research/technical-change-immigration.html#paper",
+    "href": "research/technical-change-immigration.html#paper",
+    "title": "Technical change and the wage effects of immigration",
+    "section": "Paper",
+    "text": "Paper\n\nDownload the PDF"
+  },
+  {
+    "objectID": "research/index.html",
+    "href": "research/index.html",
+    "title": "Research",
+    "section": "",
+    "text": "Working papers and work in progress. Each paper page carries the abstract, the PDF, a two-minute video abstract, and whatever code can be released.\nOn data access: parts of this work use French administrative data accessed through the CASD. The microdata cannot leave the enclave, but the full pipeline and a synthetic data generator that reproduces the file structure are published so the analysis can be audited end to end.\n\n\n\n\n\n\n\n\n\nReproducibility with restricted-access data\n\n\n\n\n\n\nmethods\n\nreproducibility\n\n\n\n\n\n\nJul 1, 2026\n\n\n\n\n\n\n\nTechnical change and the wage effects of immigration\n\n\nJob market paper\n\n\n\nimmigration\n\nautomation\n\nwages\n\n\n\n\n\n\nJun 15, 2026\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "notes/index.html",
+    "href": "notes/index.html",
+    "title": "Notes",
+    "section": "",
+    "text": "Essays and replications. Each one comes with the code, and most come with a video. Replications rerun a canonical paper in the field and report what turns up, including when nothing does.\n\n\n\n\n\n\n\n\n\nRevisiting Card (1990) on the Mariel boatlift\n\n\nReplication note 1\n\n\n\nreplication\n\nimmigration\n\nwages\n\n\n\n\n\n\nJul 20, 2026\n\n1 min\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "cv/index.html",
+    "href": "cv/index.html",
+    "title": "Curriculum Vitae",
+    "section": "",
+    "text": "Eliot Bochet-Merand\nPhD candidate in Economics — Paris Nanterre University, EconomiX\nebochetm@parisnanterre.fr"
+  },
+  {
+    "objectID": "cv/index.html#research-interests",
+    "href": "cv/index.html#research-interests",
+    "title": "Curriculum Vitae",
+    "section": "Research interests",
+    "text": "Research interests\nLabour economics; economics of immigration; technical change and automation; applied microeconometrics"
+  },
+  {
+    "objectID": "cv/index.html#education",
+    "href": "cv/index.html#education",
+    "title": "Curriculum Vitae",
+    "section": "Education",
+    "text": "Education\n\nPhD in Economics, Paris Nanterre University, EconomiX, 2024–present\n\nThesis: Technical change, human capital and immigration. Supervisor: Lionel Ragot.\n\nMSc in Macroeconometrics, Paris Nanterre University, 2022–2024\n\nThesis: Green strategies of European companies.\n\nMSc in Philosophy of Economics, Paris 1 Panthéon-Sorbonne University, 2019\n\nThesis: Philosophical and historical investigations on Samuelson’s expected utility concept.\n\n\nBSc in Economics, Lyon II University, 2016"
+  },
+  {
+    "objectID": "cv/index.html#teaching",
+    "href": "cv/index.html#teaching",
+    "title": "Curriculum Vitae",
+    "section": "Teaching",
+    "text": "Teaching\nGraduate — Paris Nanterre University\nGrowth theory — MSc in Environmental, Energy and Transport Economics, 2024–2027 (3 semesters)\nUndergraduate — Paris Nanterre University\nGame theory — BSc in Economics, 2026–2027 (1 semester)\nGrowth theory — BSc in Economics, 2025–2026 (1 semester)\nMicroeconomics — BSc in Economics, 2025–2026 (1 semester)\nMacroeconomics and policy — BSc in Economics, 2024–2025 (1 semester)\nIntroduction to economics — BBA, 2024–2025 (1 semester)\nSecondary level\n\nPrivate tutoring, Alveus, 2022–2024\n\nAll subjects, from sixième to terminale."
+  },
+  {
+    "objectID": "cv/index.html#awards-and-honours",
+    "href": "cv/index.html#awards-and-honours",
+    "title": "Curriculum Vitae",
+    "section": "Awards and honours",
+    "text": "Awards and honours\n\nEconometric Games, University of Amsterdam, 2024\n\nMember of the Paris Nanterre University team"
+  },
+  {
+    "objectID": "cv/index.html#professional-experience",
+    "href": "cv/index.html#professional-experience",
+    "title": "Curriculum Vitae",
+    "section": "Professional experience",
+    "text": "Professional experience\n\nIntern, Entendez-vous l’éco ?, France Culture (Radio France), 2019\n\nProduced one weekly episode: identified and booked academic guests, wrote the presenter’s running order structuring the hour, sourced archive audio, and built the episode’s web page.\n\n\nReceptionist, Penelope Company, 2020–2022"
+  },
+  {
+    "objectID": "cv/index.html#additional-training",
+    "href": "cv/index.html#additional-training",
+    "title": "Curriculum Vitae",
+    "section": "Additional training",
+    "text": "Additional training\nSummer School in Immigration Economics, Paris School of Economics, 2026"
+  },
+  {
+    "objectID": "cv/index.html#skills",
+    "href": "cv/index.html#skills",
+    "title": "Curriculum Vitae",
+    "section": "Skills",
+    "text": "Skills\nSoftware. R, Python, Quarto.\nLanguages. French (native), English (fluent)."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Eliot Bochet-Merand",
+    "section": "",
+    "text": "Automation shifts which tasks machines perform. Immigration shifts who performs the rest. They arrive together, and the labour market resolves them jointly — yet we study them apart.\nI am a PhD candidate at Paris Nanterre University, in the EconomiX research centre, supervised by Lionel Ragot. My thesis asks how technical change, human capital and immigration interact in the labour market, using French administrative data accessed through the CASD.\nI came to economics through its philosophy: before this thesis I worked on Samuelson’s expected utility concept at Paris 1 Panthéon-Sorbonne, and spent a year producing an economics programme for France Culture. Both still shape how I choose questions and how I try to explain answers."
+  },
+  {
+    "objectID": "index.html#does-automation-change-who-gains-from-immigration",
+    "href": "index.html#does-automation-change-who-gains-from-immigration",
+    "title": "Eliot Bochet-Merand",
+    "section": "",
+    "text": "Automation shifts which tasks machines perform. Immigration shifts who performs the rest. They arrive together, and the labour market resolves them jointly — yet we study them apart.\nI am a PhD candidate at Paris Nanterre University, in the EconomiX research centre, supervised by Lionel Ragot. My thesis asks how technical change, human capital and immigration interact in the labour market, using French administrative data accessed through the CASD.\nI came to economics through its philosophy: before this thesis I worked on Samuelson’s expected utility concept at Paris 1 Panthéon-Sorbonne, and spent a year producing an economics programme for France Culture. Both still shape how I choose questions and how I try to explain answers."
+  },
+  {
+    "objectID": "index.html#news",
+    "href": "index.html#news",
+    "title": "Eliot B. M.",
+    "section": "News",
+    "text": "News\n\nJuly 2026 — Replication note: revisiting Card (1990) on the Mariel boatlift.\n\n\nJune 2026 — New working paper: [titre du papier].\n\n\nMay 2026 — Presenting at [conférence]."
+  },
+  {
+    "objectID": "notes/posts/2026-07-card-1990.html",
+    "href": "notes/posts/2026-07-card-1990.html",
+    "title": "Revisiting Card (1990) on the Mariel boatlift",
+    "section": "",
+    "text": "[Une phrase sur pourquoi ce papier compte, et pourquoi la controverse Card-Borjas est le bon endroit pour commencer une serie de replications.]"
+  },
+  {
+    "objectID": "notes/posts/2026-07-card-1990.html#why-this-paper",
+    "href": "notes/posts/2026-07-card-1990.html#why-this-paper",
+    "title": "Revisiting Card (1990) on the Mariel boatlift",
+    "section": "",
+    "text": "[Une phrase sur pourquoi ce papier compte, et pourquoi la controverse Card-Borjas est le bon endroit pour commencer une serie de replications.]"
+  },
+  {
+    "objectID": "notes/posts/2026-07-card-1990.html#what-i-did",
+    "href": "notes/posts/2026-07-card-1990.html#what-i-did",
+    "title": "Revisiting Card (1990) on the Mariel boatlift",
+    "section": "What I did",
+    "text": "What I did\n[Donnees utilisees, ce que tu as reproduit exactement, ou tu as devie et pourquoi.]"
+  },
+  {
+    "objectID": "notes/posts/2026-07-card-1990.html#what-i-found",
+    "href": "notes/posts/2026-07-card-1990.html#what-i-found",
+    "title": "Revisiting Card (1990) on the Mariel boatlift",
+    "section": "What I found",
+    "text": "What I found\n\n\n\n[Le resultat en clair, avec la magnitude avant la significativite. Ce que ca change, ou ne change pas, pour la lecture du papier original.]"
+  },
+  {
+    "objectID": "notes/posts/2026-07-card-1990.html#video",
+    "href": "notes/posts/2026-07-card-1990.html#video",
+    "title": "Revisiting Card (1990) on the Mariel boatlift",
+    "section": "Video",
+    "text": "Video"
+  },
+  {
+    "objectID": "notes/posts/2026-07-card-1990.html#code",
+    "href": "notes/posts/2026-07-card-1990.html#code",
+    "title": "Revisiting Card (1990) on the Mariel boatlift",
+    "section": "Code",
+    "text": "Code\nRepository"
+  },
+  {
+    "objectID": "research/reproducibility.html",
+    "href": "research/reproducibility.html",
+    "title": "Reproducibility with restricted-access data",
+    "section": "",
+    "text": "Parts of this research use data accessed through the Centre d’acces securise aux donnees (CASD). No observation can leave the enclave. Confidentiality restricts the data, not the code : everything except the microdata is published here."
+  },
+  {
+    "objectID": "research/reproducibility.html#what-is-available",
+    "href": "research/reproducibility.html#what-is-available",
+    "title": "Reproducibility with restricted-access data",
+    "section": "What is available",
+    "text": "What is available\nThe full pipeline. Cleaning, variable construction, and every specification, in the order they run.\nA synthetic data generator. It reproduces the structure of the source files (the same variables, types, and plausible marginal distributions) with no real observation. Clone the repository, run the pipeline on synthetic input, and the whole chain executes. A referee can audit the logic without clearance.\nA metadata dictionary. Every variable, its source file, and how it was built."
+  },
+  {
+    "objectID": "research/reproducibility.html#what-is-not-and-why",
+    "href": "research/reproducibility.html#what-is-not-and-why",
+    "title": "Reproducibility with restricted-access data",
+    "section": "What is not, and why",
+    "text": "What is not, and why\nThe microdata. Access runs through a CASD application."
+  },
+  {
+    "objectID": "research/reproducibility.html#why-bother",
+    "href": "research/reproducibility.html#why-bother",
+    "title": "Reproducibility with restricted-access data",
+    "section": "Why bother",
+    "text": "Why bother\nJournals now require a data availability statement, and work on confidential data usually answers with a paragraph of apology. A synthetic generator plus a public pipeline is a better answer: it makes the claim checkable rather than merely stated."
+  },
+  {
+    "objectID": "teaching/econometrics-l3.html",
+    "href": "teaching/econometrics-l3.html",
+    "title": "Econometrics",
+    "section": "",
+    "text": "[Deux phrases. Ce que l’etudiant saura faire a la fin, pas la liste des chapitres.]"
+  },
+  {
+    "objectID": "teaching/econometrics-l3.html#what-this-course-is-about",
+    "href": "teaching/econometrics-l3.html#what-this-course-is-about",
+    "title": "Econometrics",
+    "section": "",
+    "text": "[Deux phrases. Ce que l’etudiant saura faire a la fin, pas la liste des chapitres.]"
+  },
+  {
+    "objectID": "teaching/econometrics-l3.html#lecture-1-the-linear-model",
+    "href": "teaching/econometrics-l3.html#lecture-1-the-linear-model",
+    "title": "Econometrics",
+    "section": "Lecture 1 — The linear model",
+    "text": "Lecture 1 — The linear model"
+  },
+  {
+    "objectID": "teaching/econometrics-l3.html#lecture-2-omitted-variable-bias",
+    "href": "teaching/econometrics-l3.html#lecture-2-omitted-variable-bias",
+    "title": "Econometrics",
+    "section": "Lecture 2 — Omitted variable bias",
+    "text": "Lecture 2 — Omitted variable bias"
+  },
+  {
+    "objectID": "teaching/econometrics-l3.html#interactive-substitution-and-wages",
+    "href": "teaching/econometrics-l3.html#interactive-substitution-and-wages",
+    "title": "Econometrics",
+    "section": "Interactive: substitution and wages",
+    "text": "Interactive: substitution and wages\nMove the elasticity of substitution and watch what happens to the wage of each group. The model is the task-based framework from Lecture 6.\n\nviewof sigma = Inputs.range([0.2, 4], {value: 1.5, step: 0.1, label: \"Elasticity of substitution\"})\nviewof immig = Inputs.range([0, 0.3], {value: 0.1, step: 0.01, label: \"Immigrant share\"})\n\nwages = {\n  const s = sigma, m = immig;\n  const grid = d3.range(0, 0.31, 0.01);\n  return grid.map(x =&gt; ({\n    share: x,\n    native: Math.pow(1 - x, -1 / s),\n    immigrant: Math.pow(x + 0.01, -1 / s)\n  }));\n}\n\nPlot.plot({\n  marks: [\n    Plot.line(wages, {x: \"share\", y: \"native\", stroke: \"#1E4C7C\", strokeWidth: 2}),\n    Plot.line(wages, {x: \"share\", y: \"immigrant\", stroke: \"#C8102E\", strokeWidth: 2}),\n    Plot.ruleX([immig], {stroke: \"#7B4B28\", strokeDasharray: \"3,3\"})\n  ],\n  x: {label: \"Immigrant share of the workforce\"},\n  y: {label: \"Relative wage\", domain: [0, 5]},\n  style: {backgroundColor: \"#EFE3CE\", fontFamily: \"Jost\"},\n  height: 300\n})\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBlue is the native wage, crimson the immigrant wage, and the dashed line marks the share you selected. Raise the elasticity and the two converge: substitutable workers compete, complementary ones do not."
   }
 ]

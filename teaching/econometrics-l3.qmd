@@ -1,0 +1,56 @@
+---
+title: "Econometrics"
+subtitle: "L3, Universite XXX, 2026-2027"
+date: 2026-09-01
+categories: [econometrics, undergraduate]
+---
+
+## What this course is about
+
+[Deux phrases. Ce que l'etudiant saura faire a la fin, pas la liste des
+chapitres.]
+
+## Lecture 1 --- The linear model
+
+{{< video https://youtu.be/REMPLACE_PAR_TON_ID >}}
+
+
+## Lecture 2 --- Omitted variable bias
+
+{{< video https://youtu.be/REMPLACE_PAR_TON_ID >}}
+
+## Interactive: substitution and wages
+
+Move the elasticity of substitution and watch what happens to the wage of each
+group. The model is the task-based framework from Lecture 6.
+
+```{ojs}
+viewof sigma = Inputs.range([0.2, 4], {value: 1.5, step: 0.1, label: "Elasticity of substitution"})
+viewof immig = Inputs.range([0, 0.3], {value: 0.1, step: 0.01, label: "Immigrant share"})
+
+wages = {
+  const s = sigma, m = immig;
+  const grid = d3.range(0, 0.31, 0.01);
+  return grid.map(x => ({
+    share: x,
+    native: Math.pow(1 - x, -1 / s),
+    immigrant: Math.pow(x + 0.01, -1 / s)
+  }));
+}
+
+Plot.plot({
+  marks: [
+    Plot.line(wages, {x: "share", y: "native", stroke: "#1E4C7C", strokeWidth: 2}),
+    Plot.line(wages, {x: "share", y: "immigrant", stroke: "#C8102E", strokeWidth: 2}),
+    Plot.ruleX([immig], {stroke: "#7B4B28", strokeDasharray: "3,3"})
+  ],
+  x: {label: "Immigrant share of the workforce"},
+  y: {label: "Relative wage", domain: [0, 5]},
+  style: {backgroundColor: "#EFE3CE", fontFamily: "Jost"},
+  height: 300
+})
+```
+
+Blue is the native wage, crimson the immigrant wage, and the dashed line marks
+the share you selected. Raise the elasticity and the two converge: substitutable
+workers compete, complementary ones do not.

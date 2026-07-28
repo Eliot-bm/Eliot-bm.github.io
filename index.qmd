@@ -1,11 +1,53 @@
 ---
-title: "EliotBM.github.io"
+title: "Eliot Bochet-Merand"
+subtitle: "PhD candidate in economics"
+about:
+  template: trestles
+  image: assets/portrait.jpeg
+  image-shape: rectangle
+  image-width: 14em
+  links:
+    - icon: envelope
+      text: Email
+      href: "mailto:ebochetm@parisnanterre.fr"
+    - icon: file-earmark-text
+      text: CV
+      href: cv/index.qmd
+    - icon: github
+      text: GitHub
+      href: "https://github.com/Eliot-bm"
+    # Scholar et RePEc : a remettre le jour ou les profils existent.
+    # Un lien vers un profil vide est pire que pas de lien.
+    # - icon: mortarboard
+    #   text: Google Scholar
+    #   href: "https://scholar.google.com/citations?user=TON_ID"
 ---
 
-This is a Quarto website.
+## Does automation change who gains from immigration?
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Automation shifts which tasks machines perform. Immigration shifts who performs
+the rest. They arrive together, and the labour market resolves them jointly ---
+yet we study them apart.
 
-```{r}
-1 + 1
-```
+I am a PhD candidate at **Paris Nanterre University**, in the **EconomiX**
+research centre, supervised by **Lionel Ragot**. My thesis asks how technical
+change, human capital and immigration interact in the labour market, using
+French administrative data accessed through the CASD.
+
+I came to economics through its philosophy: before this thesis I worked on
+Samuelson's expected utility concept at Paris 1 Panthéon-Sorbonne, and spent a
+year producing an economics programme for France Culture. Both still shape how I
+choose questions and how I try to explain answers.
+
+<!-- ------------------------------------------------------------------------
+     RUBRIQUE "NEWS" -- retiree.
+     A remettre uniquement avec des entrees VRAIES. Trois lignes maximum,
+     la plus recente en haut. Un site sans news se lit comme un site jeune ;
+     un site avec de fausses news se lit comme un probleme.
+
+     ## News
+
+     ::: {.news-item}
+     **[Mois annee]** --- [evenement reel].
+     :::
+------------------------------------------------------------------------ -->

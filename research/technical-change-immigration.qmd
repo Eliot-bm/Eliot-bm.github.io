@@ -1,0 +1,22 @@
+---
+title: "Technical change and the wage effects of immigration"
+subtitle: "Job market paper"
+date: 2026-06-15
+categories: [immigration, automation, wages]
+---
+
+## Abstract
+
+[Un paragraphe. Question, donnees, strategie d'identification, resultat
+principal, avec un chiffre. Pas de "we investigate the relationship between" :
+dis ce que tu trouves.]
+
+## Video abstract
+
+{{< video https://youtu.be/REMPLACE_PAR_TON_ID >}}
+
+## Paper
+
+- [Download the PDF](papers/technical-change-immigration.pdf)
+
+

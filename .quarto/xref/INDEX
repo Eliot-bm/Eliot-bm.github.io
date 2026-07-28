@@ -4,5 +4,29 @@
   },
   "index.qmd": {
     "index.html": "10f5aae2"
+  },
+  "cv/index.qmd": {
+    "index.html": "f42a2794"
+  },
+  "notes/index.qmd": {
+    "index.html": "81ab77ed"
+  },
+  "notes/posts/2026-07-card-1990.qmd": {
+    "2026-07-card-1990.html": "48b6ba5b"
+  },
+  "research/index.qmd": {
+    "index.html": "0aae834f"
+  },
+  "research/reproducibility.qmd": {
+    "reproducibility.html": "f7e90b76"
+  },
+  "research/technical-change-immigration.qmd": {
+    "technical-change-immigration.html": "d27c9417"
+  },
+  "teaching/econometrics-l3.qmd": {
+    "econometrics-l3.html": "3c401656"
+  },
+  "teaching/index.qmd": {
+    "index.html": "59768609"
   }
 }

@@ -1,21 +1,48 @@
+# _quarto.yml
+# Configuration generale du site.
+
 project:
   type: website
+  output-dir: _site
 
 website:
-  title: "EliotBM.github.io"
+  title: "Eliot Bochet-Merand"
+  description: "Economics of immigration and technical change"
+  site-url: "https://eliot-bm.github.io"
+
   navbar:
+    # Ordre = hierarchie de tes priorites. Research avant tout le reste.
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: research/index.qmd
+        text: Research
+      - href: teaching/index.qmd
+        text: Teaching
+      - href: notes/index.qmd
+        text: Notes
+      - href: cv/index.qmd
+        text: CV
+    right:
+      - icon: github
+        href: https://github.com/Eliot-bm
+        aria-label: GitHub
+
+  page-footer:
+    # Credit : les planches de 1900 sont l'oeuvre d'une equipe, pas d'un homme.
+    left: "Visual identity after the data portraits made by W.E.B. Du Bois and his team of Atlanta University students and alumni for the 1900 Paris Exposition."
+    right: "Built with [Quarto](https://quarto.org)"
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
-    toc: true
+    # brand = applique _brand.yml. styles.scss = les quelques reglages en plus.
+    theme: [brand, styles.scss]
+    toc: false
+    anchor-sections: true
+    link-external-newwindow: true
 
-editor: visual
-
+execute:
+  # auto = re-execute le code SEULEMENT si le .qmd a change.
+  # Indispensable : sans ca, GitHub ne pourrait pas construire le site
+  # (il n'a ni ton R, ni tes donnees CASD).
+  freeze: auto

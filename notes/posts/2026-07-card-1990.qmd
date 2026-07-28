@@ -1,0 +1,35 @@
+---
+title: "Revisiting Card (1990) on the Mariel boatlift"
+subtitle: "Replication note 1"
+date: 2026-07-20
+categories: [replication, immigration, wages]
+---
+
+## Why this paper
+
+[Une phrase sur pourquoi ce papier compte, et pourquoi la controverse
+Card-Borjas est le bon endroit pour commencer une serie de replications.]
+
+## What I did
+
+[Donnees utilisees, ce que tu as reproduit exactement, ou tu as devie et
+pourquoi.]
+
+
+
+## What I found
+
+::: {.data-plate}
+
+:::
+
+[Le resultat en clair, avec la magnitude avant la significativite. Ce que ca
+change, ou ne change pas, pour la lecture du papier original.]
+
+## Video
+
+{{< video https://youtu.be/REMPLACE_PAR_TON_ID >}}
+
+## Code
+
+[Repository](https://github.com/Eliot-bm)

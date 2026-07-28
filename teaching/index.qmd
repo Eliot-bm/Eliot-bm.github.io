@@ -1,0 +1,17 @@
+---
+title: "Teaching"
+listing:
+  contents: "*.qmd"
+  type: grid
+  grid-columns: 2
+  sort: "date desc"
+  fields: [title, subtitle, categories]
+  categories: false
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+---
+
+Course pages gather the slides, the problem sets, and the video lectures in one
+place. Videos are hosted on YouTube; the slides are built in Quarto and open in
+the browser.

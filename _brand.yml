@@ -1,0 +1,60 @@
+# _brand.yml
+# Identite visuelle unique. Quarto lit ce fichier automatiquement et l'applique
+# au site, aux slides revealjs et aux PDF. Une seule source de verite.
+# Reference : les data portraits realises par W.E.B. Du Bois ET son equipe
+# d'etudiants et d'anciens eleves de l'universite d'Atlanta (Paris, 1900).
+#
+# DEUX REGISTRES, decision assumee :
+#   - INTERFACE (ce fichier) : palette adoucie. Un site se lit vingt minutes ;
+#     le #FFD700 et le #00AA00 authentiques sont illisibles en aplats larges.
+#   - FIGURES (R/theme_dubois.R) : palette authentique saturee. Une figure
+#     frappe en trois secondes, elle peut se permettre l'audace d'origine.
+
+meta:
+  name: Eliot Bochet-Merand
+
+color:
+  # -- Palette nommee : les 5 accents Du Bois + encre + fond ---------------
+  palette:
+    # Versions desaturees, pour l'interface uniquement.
+    # (Valeur authentique en commentaire, a titre de trace.)
+    crimson: "#C8102E"   # authentique #DC143C -- liens, elements actifs
+    gold:    "#E8A33D"   # authentique #FFD700
+    indigo:  "#1E4C7C"   # authentique #4682B4
+    olive:   "#5C7A47"   # authentique #00AA00
+    umber:   "#7B4B28"   # authentique #654321
+    ink:     "#1A1A1A"
+
+  # -- Roles semantiques : ce que Quarto applique reellement ---------------
+  # Note : background reste blanc. Le creme n'arrive que dans les callouts
+  # et les figures, sinon le site glisse vers le pastiche vintage.
+  foreground: ink
+  background: white   # jamais de creme sur toute une page
+  primary: crimson
+  secondary: indigo
+  info: indigo
+  warning: gold
+  success: olive
+
+typography:
+  # Polices chargees depuis Google Fonts, rien a installer.
+  fonts:
+    - family: Jost
+      source: google
+      weight: [400, 500]
+    - family: Source Serif 4
+      source: google
+      weight: [400, 600]
+
+  base:
+    family: Source Serif 4
+    size: 17px
+    line-height: 1.7
+
+  headings:
+    family: Jost
+    weight: 500
+
+  link:
+    color: crimson
+    decoration: underline

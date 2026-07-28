@@ -1,0 +1,32 @@
+---
+title: "Reproducibility with restricted-access data"
+date: 2026-07-01
+categories: [methods, reproducibility]
+---
+
+Parts of this research use data accessed through the Centre d'acces securise aux
+donnees (CASD). No observation can leave the enclave. Confidentiality restricts
+the *data*, not the *code* : everything except the microdata is published here.
+
+## What is available
+
+**The full pipeline.** Cleaning, variable construction, and every specification,
+in the order they run.
+
+**A synthetic data generator.** It reproduces the structure of the source files
+(the same variables, types, and plausible marginal distributions) with no real
+observation. Clone the repository, run the pipeline on synthetic input, and the
+whole chain executes. A referee can audit the logic without clearance.
+
+**A metadata dictionary.** Every variable, its source file, and how it was built.
+
+## What is not, and why
+
+The microdata. Access runs through a CASD application.
+
+## Why bother
+
+Journals now require a data availability statement, and work on confidential
+data usually answers with a paragraph of apology. A synthetic generator plus a
+public pipeline is a better answer: it makes the claim checkable rather than
+merely stated.
