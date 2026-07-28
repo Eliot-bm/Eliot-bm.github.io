@@ -7,16 +7,10 @@ categories: [immigration, automation, wages]
 
 ## Abstract
 
-[Un paragraphe. Question, donnees, strategie d'identification, resultat
-principal, avec un chiffre. Pas de "we investigate the relationship between" :
-dis ce que tu trouves.]
+Draft in progress. The paper studies how local exposure to automation
+changes the wage effects of immigration in French labour markets, using
+administrative data accessed through the CASD.
 
-## Video abstract
-
-{{< video https://youtu.be/REMPLACE_PAR_TON_ID >}}
-
-## Paper
-
-- [Download the PDF](papers/technical-change-immigration.pdf)
+Full abstract and working paper coming autumn 2026.
 
 
