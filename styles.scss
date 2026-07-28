@@ -207,3 +207,26 @@ main {
 .table th {
   border-color: rgba(26, 26, 26, 0.2);
 }
+// --- Recalage sur fond carton -------------------------------------------
+// Ces éléments gardent un blanc en dur par défaut et se voient comme des
+// taches. On les ramène sur la teinte du carton, très légèrement assombrie.
+$paper-2: #E3D3B6;
+
+div.sourceCode,
+pre,
+.callout,
+.card,
+.quarto-search .aa-Form {
+  background-color: $paper-2 !important;
+  border-radius: 0;
+}
+
+code:not(pre code) {
+  background-color: $paper-2;
+  color: $dubois-umber;
+}
+
+.navbar,
+.nav-footer {
+  background-color: transparent;
+}
