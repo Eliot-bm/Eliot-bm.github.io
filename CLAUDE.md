@@ -51,7 +51,7 @@ Références : Cochrane (*Writing Tips for PhD Students*), Shapiro, McCloskey.
 | Hébergement | GitHub Pages, source = **GitHub Actions** (pas de branche `gh-pages`) | non |
 | Langue | anglais | non |
 | Exécution du code | `freeze: true`, `_freeze/` **commité** | critique |
-| Analytics | GoatCounter, sans cookie | — |
+| Analytics | GoatCounter, sans cookie | — (pas encore implémenté, voir note ci-dessous) |
 
 ### Règle `freeze` — la cause n°1 d'échec du CI
 
@@ -67,6 +67,9 @@ Si un build CI échoue avec une erreur d'exécution R/Python, la cause est presq
 `_freeze/` non commité. Ne « répare » pas ça en ajoutant `setup-r` au workflow : rends en local
 et commite le freeze.
 
+À ce jour, aucun `.qmd` ne contient de chunk R/Python exécutable et `_freeze/` n'existe pas
+encore. La règle s'applique dès le premier chunk computationnel — pas avant.
+
 ### Règle URL
 
 `eliot-bm.github.io` ne doit apparaître sur **aucun document circulant** : CV, PDF de working paper,
@@ -78,7 +81,8 @@ Partout ailleurs, chemins relatifs. Toute URL absolue en dur dans un `.qmd` est 
 ### Ne jamais faire
 
 - Commiter `_site/`.
-- Ajouter une bannière cookies (l'analytics est exempté de consentement — cf. `privacy.qmd`).
+- Ajouter une bannière cookies une fois GoatCounter en place (l'analytics est exempté de
+  consentement) — mais l'écrire dans `privacy.qmd`, qui n'existe pas encore (voir §4).
 - Ajouter React, Vue, jQuery, ou un bundler. Ce site est du HTML statique.
 - Renommer ou déplacer un répertoire de post/paper déjà publié : l'URL casse et les liens
   entrants meurent. Créer une redirection à la place.
@@ -91,16 +95,22 @@ Partout ailleurs, chemins relatifs. Toute URL absolue en dur dans un `.qmd` est 
 ```
 .
 ├── _quarto.yml                 # configuration unique du site
+├── _brand.yml                  # identite visuelle (couleurs, polices)
+├── styles.scss                 # reglages CSS en plus de _brand.yml
 ├── index.qmd                   # homepage (about / trestles)
 ├── research/                   # index listing + un dossier par paper
-├── teaching/                   # index listing + matériel étudiant
-├── blog/                       # index listing + un dossier par post
-├── privacy.qmd                 # mention analytics (obligation CNIL d'information)
-├── assets/                     # og-default.png, favicon, CV
-├── _includes/analytics.html    # script GoatCounter + events PDF
-├── _freeze/                    # résultats d'exécution gelés — COMMITÉ
+├── teaching/                   # index listing + materiel etudiant
+├── notes/                      # index listing + un dossier par post (posts/)
+├── cv/                         # page CV
+├── assets/                     # portrait, images — og-default.png/favicon a ajouter
+├── R/                          # scripts R partages (ex. theme_dubois.R)
 └── .github/workflows/publish.yml
 ```
+
+Pas encore créés, à faire avant le premier vrai déploiement public :
+- `privacy.qmd` — mention analytics (obligation CNIL d'information).
+- `_includes/analytics.html` — script GoatCounter + events PDF.
+- `_freeze/` — apparaîtra automatiquement au premier `quarto render` d'un `.qmd` computationnel.
 
 ---
 
