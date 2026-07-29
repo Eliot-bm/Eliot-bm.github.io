@@ -1,0 +1,25 @@
+"age_min","origin","qual","broad","share"
+15,"Immigrants","No diploma or lower secondary","Low",40.13
+15,"Immigrants","Vocational certificate (CAP-BEP)","Medium",14.42
+15,"Immigrants","Upper secondary (baccalaureat)","Medium",15.6
+15,"Immigrants","Short-cycle tertiary (BTS, DUT)","High",6.25
+15,"Immigrants","Bachelor's (licence, maitrise)","High",9.8
+15,"Immigrants","Master's or doctorate","High",13.79
+15,"Natives","No diploma or lower secondary","Low",26.68
+15,"Natives","Vocational certificate (CAP-BEP)","Medium",22.68
+15,"Natives","Upper secondary (baccalaureat)","Medium",19.12
+15,"Natives","Short-cycle tertiary (BTS, DUT)","High",11.11
+15,"Natives","Bachelor's (licence, maitrise)","High",9.61
+15,"Natives","Master's or doctorate","High",10.8
+25,"Immigrants","No diploma or lower secondary","Low",39.96
+25,"Immigrants","Vocational certificate (CAP-BEP)","Medium",14.78
+25,"Immigrants","Upper secondary (baccalaureat)","Medium",14.28
+25,"Immigrants","Short-cycle tertiary (BTS, DUT)","High",6.34
+25,"Immigrants","Bachelor's (licence, maitrise)","High",9.88
+25,"Immigrants","Master's or doctorate","High",14.75
+25,"Natives","No diploma or lower secondary","Low",23.25
+25,"Natives","Vocational certificate (CAP-BEP)","Medium",25.26
+25,"Natives","Upper secondary (baccalaureat)","Medium",17.11
+25,"Natives","Short-cycle tertiary (BTS, DUT)","High",11.96
+25,"Natives","Bachelor's (licence, maitrise)","High",10.13
+25,"Natives","Master's or doctorate","High",12.29

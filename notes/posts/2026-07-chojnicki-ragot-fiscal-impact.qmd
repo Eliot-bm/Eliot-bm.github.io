@@ -1,0 +1,179 @@
+---
+title: "Immigration and the ageing of the French welfare state"
+subtitle: "Replication note 1"
+description: "France's 2026 official projections put the 2050 old-age dependency ratio at 47.7% under central migration assumptions — almost exactly where Chojnicki and Ragot's 2012 no-immigration counterfactual stood."
+date: 2026-07-29
+categories: [replication, immigration, pensions, interactive]
+bibliography: references.bib
+---
+
+Chojnicki and Ragot [-@chojnicki2012] asked whether immigration could reduce the
+fiscal burden of population ageing in France. Their answer, from a dynamic
+general equilibrium model with overlapping generations, was yes, but modestly:
+halting immigration in 2005 would have widened the social protection financing
+gap by 1.3 points of GDP by 2050, while doubling net flows bought a smaller gain
+than the demographic change it implied.
+
+That paper calibrated its demographic block on the 2006 Insee projections. Insee
+published a new projection exercise in June 2026. Both central assumptions have
+moved sharply since, and in opposite directions.
+
+| | Insee 2006 | Insee 2021 | Insee 2026 |
+|---|---|---|---|
+| Total fertility rate | about 1.9 | 1.80 | **1.45** from 2028 |
+| Net migration, a year | about 100,000 | +70,000 | **+150,000** |
+
+Observed fertility reached 1.56 in 2025, below the *low* variant of the 2021
+exercise. Net migration reached 271,000 in 2022, above its *high* variant. The
+natural balance turns negative from 2025, so population growth is now entirely
+migratory.
+
+This note does one thing: it recomputes the demographic ratio that drives the
+pension side of the 2012 paper, using the 2026 projections, and compares it to
+what that paper projected. It does not rebuild the general equilibrium model, so
+nothing here speaks to GDP per capita, tax rates, or the financing gap itself.
+
+## The dependency ratio under three migration scenarios
+
+::: {.data-plate}
+
+```{ojs}
+//| echo: false
+dep = FileAttachment("data/dependency.csv").csv({typed: true})
+
+viewof year = Inputs.range([2025, 2070], {
+  value: 2050, step: 1, label: "Year", format: y => `${y}`
+})
+
+atYear = dep.filter(d => d.year === year)
+
+Plot.plot({
+  marginLeft: 46,
+  marginRight: 150,
+  height: 340,
+  x: {label: "Year", tickFormat: "d", domain: [2000, 2070]},
+  y: {label: "65 and over per 100 aged 15-64", grid: true, domain: [20, 65]},
+  color: {legend: false},
+  marks: [
+    Plot.ruleX([year], {stroke: "currentColor", strokeOpacity: 0.35}),
+    Plot.line(dep, {x: "year", y: "ratio", stroke: "scenario", strokeWidth: 2}),
+    Plot.dot(atYear, {x: "year", y: "ratio", fill: "scenario", r: 4}),
+    Plot.text(atYear, {
+      x: "year", y: "ratio", text: d => `${d.ratio.toFixed(1)}  ${d.scenario}`,
+      dx: 8, textAnchor: "start", fontSize: 11
+    }),
+    Plot.ruleY([20])
+  ]
+})
+```
+
+:::
+
+Source: Insee, 2026 population projections (Licence Ouverte 2.0). Ratio computed
+from single years of age; it reproduces Insee's published aggregates to within
+0.05 point. Insee's own published ratio uses 65+ over 20-64 and is not
+comparable to the 65+ over 15-64 measure used here and in the 2012 paper.
+
+## What the comparison gives
+
+Chojnicki and Ragot projected a dependency ratio of 44.2 in 2050 under their
+reference scenario, and 47.8 if immigration stopped in 2005. The 2026 central
+projection, which assumes 150,000 net entries a year, gives **47.7 in 2050**.
+
+Today's central case, with substantial immigration, sits where the 2012 paper
+placed its zero-immigration counterfactual. The reason is not migration, which
+runs above what that paper assumed, but fertility, which nobody assumed would
+fall this far. The 2012 exercise treated immigration as one lever among several
+against a demographic backdrop that has since deteriorated faster than the lever
+can move it.
+
+The spread across migration scenarios is also worth reading in magnitude rather
+than in direction. Moving from 70,000 to 230,000 net entries a year — a range
+of 160,000 people annually, sustained for forty-five years — shifts the 2050
+ratio by 3.8 points, from 49.7 to 45.9. That is the same order as the 3.6-point
+gap the 2012 paper found between its reference and no-immigration cases, and it
+confirms their conclusion rather than overturning it: immigration moves the
+dependency ratio, and it does not move it far.
+
+## Who the immigrant population is
+
+The 2012 paper's selective-immigration scenario turns on the skill composition
+of entrants. That composition is worth looking at directly.
+
+::: {.data-plate}
+
+```{ojs}
+//| echo: false
+qual = FileAttachment("data/qualification.csv").csv({typed: true})
+
+sixOrder = [
+  "No diploma or lower secondary",
+  "Vocational certificate (CAP-BEP)",
+  "Upper secondary (baccalaureat)",
+  "Short-cycle tertiary (BTS, DUT)",
+  "Bachelor's (licence, maitrise)",
+  "Master's or doctorate"
+]
+
+viewof detail = Inputs.radio(["Six classes", "Three classes"], {
+  value: "Six classes", label: "Detail"
+})
+
+qualRows = {
+  const sel = qual.filter(d => d.age_min === 25);
+  if (detail === "Six classes") {
+    return sel.map(d => ({origin: d.origin, cls: d.qual, share: d.share}));
+  }
+  return d3.rollups(sel, v => d3.sum(v, d => d.share), d => d.origin, d => d.broad)
+    .flatMap(([origin, a]) => a.map(([cls, share]) => ({origin, cls, share})));
+}
+
+Plot.plot({
+  marginLeft: 200,
+  marginRight: 20,
+  height: detail === "Six classes" ? 260 : 150,
+  x: {label: "Share of the population aged 25 and over (%)", grid: true},
+  y: {label: null, domain: detail === "Six classes" ? sixOrder : ["Low", "Medium", "High"]},
+  color: {legend: true},
+  marks: [
+    Plot.barX(qualRows, {x: "share", y: "cls", fill: "origin", insetTop: 1.5, insetBottom: 1.5}),
+    Plot.ruleX([0])
+  ]
+})
+```
+
+:::
+
+Source: Insee, 2021 population census, detailed file (Licence Ouverte 2.0).
+Immigrant follows the Insee definition: born a foreign national outside France.
+
+The distribution is polarised rather than shifted. Immigrants aged 25 and over
+are more often without a diploma than natives, by 16.8 points, and more often
+holders of a master's degree or a doctorate, by 2.5 points. The deficit sits in
+between, and it is largest on short-cycle tertiary degrees, at 5.7 points.
+
+Part of the gap at the bottom measures where people were educated rather than
+how much. The CAP-BEP is a French vocational credential that someone arriving as
+an adult cannot hold, and foreign qualifications map poorly onto the French
+nomenclature. Collapsing these six classes into the three used in the 2012 paper
+hides the pattern entirely: the tertiary share then reads 31.0% for immigrants
+against 34.4% for natives, a flat three-point deficit.
+
+## Limits
+
+The comparison with the 2012 figures is indicative, not exact. That paper's
+demographic block came out of its own model, calibrated on 2006 projections, and
+its text and its table give different age bounds for the dependency ratio. The
+figures here are read against its published table.
+
+Nothing in this note recomputes the fiscal side. The 2012 results on GDP per
+capita, apparent tax rates and financing needs come from a general equilibrium
+model that is not reproduced here, and the accounting decomposition of Chojnicki,
+Ragot and Sokhna [-@chojnicki2022] would need per-capita contribution profiles by
+age, origin and qualification that are published only as a figure.
+
+## Data and code
+
+Insee 2026 population projections and the 2021 census detailed file, both under
+Licence Ouverte 2.0. Extraction and computation scripts are in
+[`R/replication/`](https://github.com/Eliot-bm/Eliot-bm.github.io/tree/main/R/replication).
