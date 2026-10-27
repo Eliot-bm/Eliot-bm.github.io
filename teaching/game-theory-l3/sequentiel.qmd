@@ -1,0 +1,584 @@
+---
+title: "Jeux séquentiels : quatre exercices corrigés"
+subtitle: "Forme extensive, backward induction, équilibre parfait en sous-jeux"
+description: "Quatre exercices inédits corrigés étape par étape : ultimatum, avantage du premier joueur, négociation à deux tours, dissuasion d'entrée par engagement. Chaque arbre se résout pas à pas."
+date: 2026-10-27
+categories: [théorie des jeux, jeux séquentiels, L3]
+---
+
+Ces exercices complètent la fiche de TD 2 (jeux séquentiels et backward induction).
+Comme pour les [jeux simultanés](simultane.qmd), les énoncés sont nouveaux.
+Cherchez sur papier d'abord, dépliez la correction ensuite.
+
+## D'où vient cette idée
+
+Dans un jeu simultané, l'équilibre de Nash demande que personne ne dévie. Dans
+un jeu séquentiel, cette demande est trop faible, et l'on peut voir pourquoi.
+
+Un équilibre de Nash n'exige des joueurs un comportement rationnel que **sur le
+chemin joué**. Tout ce qui se passerait ailleurs dans l'arbre peut être n'importe
+quoi, et c'est précisément là que se logent les **menaces non crédibles** : « si tu
+fais cela, je te punis », alors que punir coûterait plus cher que pardonner une
+fois la faute commise. L'équilibre de Nash accepte ces menaces, parce que, si
+tout le monde y croit, on n'a jamais à les exécuter.
+
+Selten (1965) a posé la bonne exigence : le comportement doit être rationnel
+**dans chaque sous-jeu**, y compris ceux que l'équilibre n'atteint jamais. D'où
+l'*équilibre parfait en sous-jeux*. La méthode pour le trouver est plus ancienne
+que le concept : raisonner à rebours depuis la fin du jeu, comme Zermelo (1913)
+l'avait fait pour les échecs, et comme Kuhn (1953) l'a formalisé pour les arbres
+généraux. C'est la **backward induction**.
+
+Sur un arbre fini où chaque joueur voit tout ce qui précède, la backward induction
+produit les équilibres parfaits en sous-jeux. Quand deux gains sont égaux à un
+nœud, chaque choix possible donne un équilibre différent.
+
+```{ojs}
+//| echo: false
+import {C, plotStyle, fr, toNode, pureNE, matrixTable, treeSVG, treeStepText, treeHeight} from "./gt.js"
+
+// Un même geste pour tous les arbres de la page.
+function arbre(tree, step) {
+  return html`<div>${toNode(treeSVG(tree, step))}<div style="font-family:Jost;font-size:.9rem;max-width:34rem;margin-top:.3rem">${toNode(treeStepText(tree, step))}</div></div>`;
+}
+```
+
+## Une stratégie n'est pas une action
+
+C'est la confusion la plus coûteuse de cette fiche, et elle ressemble à celle de $S$ contre $s$.
+
+- Une **action** est un choix à **un** nœud : « accepter ».
+- Une **stratégie** est un **plan complet** : une action pour **chaque** nœud où le
+  joueur pourrait avoir à jouer, y compris ceux qu'il n'atteindra jamais.
+
+Un joueur qui joue à deux nœuds différents, avec deux actions possibles à chacun, a
+$2\times2=4$ stratégies, pas 2. L'exercice 1 en fait la démonstration.
+
+## Exercice 1. L'ultimatum
+
+Un proposeur (joueur 1) dispose de $4$ euros. Il propose soit un partage
+**équitable** ($2$ pour lui, $2$ pour l'autre), soit un partage **inéquitable** ($3$
+pour lui, $1$ pour l'autre). Le répondeur (joueur 2) voit la proposition et
+**accepte** ou **refuse**. S'il refuse, les deux joueurs reçoivent $0$. Gains :
+(joueur 1 ; joueur 2).
+
+1. Représenter le jeu sous forme extensive.
+2. Combien de stratégies a chaque joueur ? Écrire la forme stratégique.
+3. Trouver tous les équilibres de Nash en stratégies pures.
+4. Résoudre par backward induction. Quel est l'équilibre parfait en sous-jeux ?
+5. Pourquoi les autres équilibres de Nash ne sont-ils pas parfaits ?
+
+Faites avancer le curseur pour exécuter la backward induction.
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+T1 = ({who: 1, name: "« Proposeur »", kids: [
+  {a: "Équitable", n: {who: 2, name: "« Répondeur, après Équitable »", kids: [
+    {a: "Accepter", n: {pay: [2, 2]}}, {a: "Refuser", n: {pay: [0, 0]}}]}},
+  {a: "Inéquitable", n: {who: 2, name: "« Répondeur, après Inéquitable »", kids: [
+    {a: "Accepter", n: {pay: [3, 1]}}, {a: "Refuser", n: {pay: [0, 0]}}]}}
+]})
+viewof st1 = Inputs.range([0, treeHeight(T1)], {value: 0, step: 1, label: "étape de la backward induction"})
+```
+
+```{ojs}
+//| echo: false
+arbre(T1, st1)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Question 1. L'arbre.** C'est la figure ci-dessus à l'étape 0 : le joueur 1 joue
+en premier (deux branches), le joueur 2 joue ensuite à l'un de **deux nœuds
+distincts**, selon ce qu'il a vu.
+
+**Question 2. Les stratégies.**
+
+- Le joueur 1 joue à **un** nœud avec 2 actions : $S_1=\{E,I\}$ (Équitable,
+  Inéquitable). Deux stratégies.
+- Le joueur 2 joue à **deux** nœuds avec 2 actions chacun. Sa stratégie dit quoi
+  faire dans **les deux** cas. On la note par deux lettres : (action après $E$,
+  action après $I$).
+$$S_2=\{AA,\ AR,\ RA,\ RR\}.$$
+Quatre stratégies. $AR$ se lit : « j'accepte si on m'offre $E$, je refuse si on
+m'offre $I$ ». Cette stratégie est une phrase complète, même si, à l'équilibre,
+l'un des deux cas n'arrive jamais.
+
+On remplit chaque case en suivant le plan du joueur 2 le long de la branche que
+joue le joueur 1. Exemple : $(I,AR)$ : le joueur 1 joue $I$, le joueur 2 applique
+sa règle pour $I$, qui est « refuser », donc $(0\,;\,0)$.
+
+|  | $AA$ | $AR$ | $RA$ | $RR$ |
+|---|---|---|---|---|
+| $E$ | (2 ; 2) | (2 ; 2) | (0 ; 0) | (0 ; 0) |
+| $I$ | (3 ; 1) | (0 ; 0) | (3 ; 1) | (0 ; 0) |
+
+**Question 3. Équilibres de Nash.** On souligne les meilleures réponses (en cas
+d'égalité, on souligne les deux).
+
+*Joueur 1, colonne par colonne.* Face à $AA$ : $2$ ou $3$, il joue $I$. Face à $AR$ :
+$2$ ou $0$, il joue $E$. Face à $RA$ : $0$ ou $3$, il joue $I$. Face à $RR$ : $0$ ou
+$0$, les deux.
+
+*Joueur 2, ligne par ligne.* Face à $E$ : $2,2,0,0$, il joue $AA$ ou $AR$. Face à $I$ :
+$1,0,1,0$, il joue $AA$ ou $RA$.
+
+Cases soulignées par les deux : $(E,AR)$, $(I,AA)$, $(I,RA)$. **Trois équilibres de
+Nash.** Cochez la case ci-dessous pour les voir sur la matrice.
+
+**Question 4. Backward induction.** On part des nœuds du bas, ceux où le joueur 2
+décide (étape 1 du curseur).
+
+- Après $E$ : accepter donne $2$, refuser donne $0$. Il **accepte**.
+- Après $I$ : accepter donne $1$, refuser donne $0$. Il **accepte**.
+
+On remonte au joueur 1 (étape 2), qui sait comment le joueur 2 répondra : $E$ lui
+rapporte $2$, $I$ lui rapporte $3$. Il joue $I$.
+
+**Équilibre parfait en sous-jeux :** $(I,AA)$, de gains $(3\,;\,1)$. C'est le seul.
+
+**Question 5. Pourquoi les deux autres échouent.**
+
+- $(E,AR)$ : le joueur 2 menace de refuser $I$. Si le joueur 1 y croit, il joue $E$
+  et touche $2$. C'est un équilibre de Nash. Mais **refuser $I$ rapporte $0$ au
+  joueur 2, alors qu'accepter lui rapporte $1$**. Si $I$ était réellement joué, il
+  ne mettrait pas sa menace à exécution : elle n'est pas crédible.
+- $(I,RA)$ : sur le chemin joué, le joueur 2 accepte $I$ et tout va bien. Mais le
+  plan prévoit de refuser $E$, ce qui ne lui rapporte rien : $0$ contre $2$. Ce
+  plan n'est jamais testé, donc le joueur 1 n'a aucune raison de le contester,
+  et l'équilibre de Nash passe. Il échoue dans le sous-jeu qui suit $E$.
+
+**Définition utile.** Un équilibre est *parfait en sous-jeux* s'il induit un
+équilibre de Nash **dans chaque sous-jeu**. Ici, chaque nœud du joueur 2 ouvre un
+sous-jeu (il observe tout ce qui précède). Le plan du joueur 2 doit donc être
+optimal à **chaque** nœud : cela impose $AA$ et rien d'autre.
+
+**Remarque sur le réel.** L'ultimatum a été testé en laboratoire par Güth,
+Schmittberger et Schwarze (1982) : les répondeurs refusent souvent des offres
+très inéquitables, alors que la théorie prédit qu'ils les acceptent. La
+backward induction décrit un joueur qui ne se soucie que de son gain monétaire.
+Quand les observations s'en écartent, c'est cette hypothèse qu'il faut
+questionner, pas l'arithmétique de l'arbre.
+:::
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+A1s = [[2, 2, 0, 0], [3, 0, 3, 0]]
+B1s = [[2, 2, 0, 0], [1, 0, 1, 0]]
+viewof show1 = Inputs.toggle({label: "souligner les meilleures réponses de la forme stratégique", value: false})
+```
+
+```{ojs}
+//| echo: false
+{
+  const tab = toNode(matrixTable(A1s, B1s, ["E", "I"], ["AA", "AR", "RA", "RR"], {underline: show1, rowTitle: "Joueur 1", colTitle: "Joueur 2 : (après E, après I)"}));
+  const ne = pureNE(A1s, B1s).map(([i, j]) => `(${["E", "I"][i]} ; ${["AA", "AR", "RA", "RR"][j]})`);
+  const cap = show1
+    ? `Équilibres de Nash : ${ne.join(", ")}. Un seul est parfait en sous-jeux : (I ; AA).`
+    : "Les quatre stratégies du joueur 2 : deux actions à chacun de ses deux nœuds.";
+  return html`<div>${tab}<p style="font-family:Jost;font-size:.9rem;max-width:34rem">${cap}</p></div>`;
+}
+```
+
+:::
+
+## Exercice 2. Gagner à jouer le premier
+
+Deux firmes choisissent leur production : **Haute** ($H$) ou **Basse** ($B$).
+Gains (firme 1 ; firme 2) :
+
+|  | $H$ | $B$ |
+|---|---|---|
+| $H$ | (1 ; 1) | (6 ; 3) |
+| $B$ | (3 ; 6) | (4 ; 4) |
+
+1. Les firmes choisissent simultanément. Déterminer les équilibres de Nash, purs
+   et mixte.
+2. La firme 1 choisit d'abord ; la firme 2 observe, puis choisit. Représenter
+   l'arbre et résoudre par backward induction.
+3. Écrire la forme stratégique du jeu séquentiel et trouver ses équilibres de Nash.
+   Lesquels sont parfaits en sous-jeux ?
+4. Comparer. La firme 1 gagne-t-elle à jouer la première ? Et la firme 2 ?
+
+Deux arbres pour le **même** tableau de gains. Le trait épais entre les deux
+nœuds du joueur 2, dans le premier arbre, signifie qu'il **ne sait pas** lequel
+des deux il occupe : c'est un *ensemble d'information*. C'est ce qui distingue
+« simultané » de « séquentiel », et c'est la seule différence.
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+T2s = ({who: 1, name: "« Firme 1 »", kids: [
+  {a: "H", n: {who: 2, info: "I", name: "« Firme 2 »", kids: [
+    {a: "H", n: {pay: [1, 1]}}, {a: "B", n: {pay: [6, 3]}}]}},
+  {a: "B", n: {who: 2, info: "I", name: "« Firme 2 »", kids: [
+    {a: "H", n: {pay: [3, 6]}}, {a: "B", n: {pay: [4, 4]}}]}}
+]})
+
+T2 = ({who: 1, name: "« Firme 1 »", kids: [
+  {a: "H", n: {who: 2, name: "« Firme 2, après H »", kids: [
+    {a: "H", n: {pay: [1, 1]}}, {a: "B", n: {pay: [6, 3]}}]}},
+  {a: "B", n: {who: 2, name: "« Firme 2, après B »", kids: [
+    {a: "H", n: {pay: [3, 6]}}, {a: "B", n: {pay: [4, 4]}}]}}
+]})
+
+html`<p style="font-family:Jost;font-weight:600;margin:.2rem 0">Simultané : la firme 2 ne voit pas le choix de la firme 1</p>`
+```
+
+```{ojs}
+//| echo: false
+toNode(treeSVG(T2s, 0))
+```
+
+```{ojs}
+//| echo: false
+html`<p style="font-family:Jost;font-weight:600;margin:.8rem 0 .2rem">Séquentiel : la firme 2 observe, puis choisit</p>`
+viewof st2 = Inputs.range([0, treeHeight(T2)], {value: 0, step: 1, label: "étape de la backward induction"})
+```
+
+```{ojs}
+//| echo: false
+arbre(T2, st2)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Question 1. Simultané.** $S_1=S_2=\{H,B\}$.
+
+*Équilibres purs.* Firme 1 face à $H$ : $1$ ou $3$, elle joue $B$. Face à $B$ : $6$
+ou $4$, elle joue $H$. Le jeu est symétrique : même chose pour la firme 2.
+Cases soulignées par les deux : $(H,B)$ et $(B,H)$, de gains $(6\,;\,3)$ et
+$(3\,;\,6)$. Dans chacun, une firme produit beaucoup et l'autre s'efface, et
+**chacune préfère être celle qui produit beaucoup** : conflit sur la répartition.
+
+*Équilibre mixte.* $\sigma_1=(p,1-p)$ sur $(H,B)$, $\sigma_2=(q,1-q)$. On fait la
+firme 2 indifférente :
+$$U_2(H,\sigma_1)=1\cdot p+6(1-p)=6-5p,\qquad U_2(B,\sigma_1)=3p+4(1-p)=4-p.$$
+$6-5p=4-p$ donne $p^*=\tfrac12$. Par symétrie $q^*=\tfrac12$. Gain espéré de chaque
+firme : $\tfrac14(1+6+3+4)=3{,}5$. **Équilibre mixte :**
+$\big((\tfrac12,\tfrac12),(\tfrac12,\tfrac12)\big)$.
+
+Le jeu a donc trois équilibres, et rien dans le jeu simultané ne dit lequel sera
+joué.
+
+**Question 2. Séquentiel, firme 1 d'abord.** Backward induction.
+
+- Après $H$ : la firme 2 compare $H\to1$ et $B\to3$. Elle choisit $B$.
+- Après $B$ : elle compare $H\to6$ et $B\to4$. Elle choisit $H$.
+
+La firme 1 anticipe : $H$ lui rapporte $6$ (car la firme 2 répondra $B$), $B$ lui
+rapporte $3$ (car la firme 2 répondra $H$). Elle joue $H$.
+
+**Équilibre parfait en sous-jeux :** la firme 1 joue $H$ ; la firme 2 joue « $B$ si
+$H$, $H$ si $B$ ». Gains $(6\,;\,3)$.
+
+**Question 3. Forme stratégique du séquentiel.** La firme 1 a 2 stratégies. La
+firme 2 joue après chacune des deux actions possibles : $S_2=\{HH,HB,BH,BB\}$,
+où la 1re lettre est sa réponse à $H$, la 2e sa réponse à $B$.
+
+|  | $HH$ | $HB$ | $BH$ | $BB$ |
+|---|---|---|---|---|
+| $H$ | (1 ; 1) | (1 ; 1) | (6 ; 3) | (6 ; 3) |
+| $B$ | (3 ; 6) | (4 ; 4) | (3 ; 6) | (4 ; 4) |
+
+En soulignant : **trois équilibres de Nash**, $(H,BH)$, $(H,BB)$ et $(B,HH)$.
+
+- $(H,BH)$ : c'est l'équilibre de la backward induction. **Parfait.**
+- $(H,BB)$ : mêmes gains $(6\,;\,3)$, mais la firme 2 prévoit de répondre $B$ à $B$.
+  Cela ne se produit jamais, mais si cela se produisait elle gagnerait $4$ alors que
+  $H$ lui donnerait $6$. **Non parfait.**
+- $(B,HH)$ : la firme 2 « menace » de produire beaucoup quoi que fasse la firme 1.
+  Si la firme 1 y croit, elle joue $B$ et la firme 2 touche $6$. Mais si la firme 1
+  jouait $H$, répondre $H$ donnerait à la firme 2 $1$ alors que $B$ donnerait $3$ :
+  la menace n'est pas crédible. **Non parfait.**
+
+**Question 4. Comparaison.**
+
+| | firme 1 | firme 2 |
+|---|---|---|
+| Simultané, équilibre $(H,B)$ | 6 | 3 |
+| Simultané, équilibre $(B,H)$ | 3 | 6 |
+| Simultané, équilibre mixte | 3,5 | 3,5 |
+| Séquentiel, firme 1 d'abord | **6** | **3** |
+
+Jouer le premier est un **avantage ici** : la firme 1 obtient $6$, son meilleur
+résultat possible à l'équilibre, alors que le jeu simultané ne le garantissait
+pas. Elle l'obtient parce que son choix est **irréversible et observé**, ce qui
+oblige la firme 2 à s'adapter : c'est l'engagement de Stackelberg (1934). La
+firme 2, elle, obtient $3$, moins que les $3{,}5$ de l'équilibre mixte. **Voir
+le choix de l'adversaire ne l'aide pas** : il lui retire la possibilité de
+rendre l'autre incertain. Contrairement à une décision individuelle, avoir plus
+d'information peut nuire dans un jeu.
+
+Si la firme 2 jouait la première, le résultat serait symétrique : $(3\,;\,6)$.
+
+L'avantage du premier joueur n'a rien de général : il disparaît, ou s'inverse, quand
+le jeu favorise le dernier à parler (exercice 3).
+:::
+
+## Exercice 3. Négocier quand attendre coûte
+
+Deux joueurs se partagent un gâteau de $10$. **Tour 1** : le joueur 1 propose de
+garder $x$ et d'offrir $10-x$ au joueur 2. Le joueur 2 accepte (le jeu s'arrête) ou
+refuse. **Tour 2**, s'il refuse : le gâteau a rétréci, il ne vaut plus que $10\,\delta$
+avec $\delta=0{,}6$. Le joueur 2 propose alors un partage, et le joueur 1 accepte
+ou refuse. S'il refuse, les deux ont $0$.
+
+1. Résoudre le tour 2 (backward induction).
+2. En déduire ce que le joueur 2 accepte au tour 1, puis ce que propose le joueur 1.
+3. Le joueur 1 profite-t-il d'être le premier ? Que se passe-t-il si $\delta$ augmente ?
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+viewof delta = Inputs.range([0.1, 0.95], {value: 0.6, step: 0.05, label: "δ (part du gâteau qui subsiste)"})
+```
+
+```{ojs}
+//| echo: false
+{
+  const part1 = 10 * (1 - delta), part2 = 10 * delta;
+  const courbe = d3.range(0.05, 0.96, 0.01).flatMap(d => [
+    {d, v: 10 * (1 - d), j: "Joueur 1"}, {d, v: 10 * d, j: "Joueur 2"}]);
+  const plot = Plot.plot({
+    width: 560, height: 300, style: plotStyle,
+    marginLeft: 56, marginBottom: 46,
+    x: {domain: [0, 1], label: "δ →"},
+    y: {domain: [0, 10], label: "↑ part obtenue à l'équilibre"},
+    color: {domain: ["Joueur 1", "Joueur 2"], range: [C.indigo, C.crimson], legend: true},
+    marks: [
+      Plot.line(courbe, {x: "d", y: "v", stroke: "j", strokeWidth: 2.4}),
+      Plot.ruleX([delta], {stroke: C.ink, strokeDasharray: "4,3"}),
+      Plot.dot([{d: delta, v: part1, j: "Joueur 1"}, {d: delta, v: part2, j: "Joueur 2"}],
+               {x: "d", y: "v", fill: "j", r: 6, stroke: "white"}),
+      Plot.ruleY([5], {stroke: C.ink, strokeOpacity: .2})
+    ]
+  });
+  const txt = html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
+    Tour 2 : le joueur 2 garde ${fr(10 * delta, 1)} et offre 0 au joueur 1.
+    Tour 1 : le joueur 2 accepte toute offre d'au moins ${fr(10 * delta, 1)}, donc le joueur 1 propose
+    exactement cela et garde <b>${fr(10 * (1 - delta), 1)}</b>.
+    Partage : (${fr(10 * (1 - delta), 1)} ; ${fr(10 * delta, 1)}), conclu au tour 1.</p>`;
+  return html`<div>${plot}${txt}</div>`;
+}
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Question 1. Le tour 2.** On commence par la fin. Au tour 2, le gâteau vaut
+$10\delta=6$. Le joueur 2 propose : il garde $6-y$ et offre $y$ au joueur 1. Le
+joueur 1 accepte s'il obtient au moins ce que lui rapporte un refus, c'est-à-dire
+$0$. Il accepte donc toute offre $y\ge0$. Le joueur 2 a intérêt à offrir le moins
+possible : $y=0$. Il garde $6$.
+
+*Point technique.* À $y=0$ le joueur 1 est exactement indifférent entre accepter
+et refuser. On suppose qu'il **accepte**. Si l'on supposait qu'il refuse, le joueur 2
+voudrait offrir « un tout petit peu plus que $0$ », et il n'existe pas de plus petit
+nombre strictement positif : la meilleure réponse du joueur 2 n'existerait pas.
+C'est la convention standard, elle ne change le résultat que d'un $\varepsilon$.
+
+**Question 2. Le tour 1.** Refuser rapporte donc $6$ au joueur 2 (il obtient $6$ au
+tour suivant). Il accepte l'offre $10-x$ si $10-x\ge6$, soit $x\le4$. Le joueur 1
+veut garder le plus possible : $x=4$.
+
+**Équilibre parfait en sous-jeux :** le joueur 1 propose $(4\,;\,6)$, le joueur 2
+accepte. Gains $(4\,;\,6)$.
+
+**À noter.** À l'équilibre, **on ne refuse jamais** : l'accord est immédiat. Le tour 2
+n'est jamais joué. Il pèse pourtant sur tout le jeu, parce que c'est lui qui fixe le
+prix du refus. Un résultat de négociation se lit dans ce qui se passerait si l'on
+ne s'entendait pas.
+
+**Question 3.** Le joueur 1 joue le premier et **obtient moins** : $4$ contre $6$.
+Parler le premier ne donne aucun avantage ici. Celui qui parle **en dernier** tient
+l'autre à sa merci, et son pouvoir tient au coût de l'attente.
+
+En général, le joueur 1 obtient $10(1-\delta)$ et le joueur 2 $10\delta$. Plus
+$\delta$ est grand, moins l'attente coûte, et plus le joueur 2 exige. À
+$\delta=0{,}5$ le partage est équitable. Rubinstein (1982) traite le cas où le jeu
+n'a pas de dernier tour : le premier joueur obtient alors la part $1/(1+\delta)$,
+soit plus de la moitié, et cet avantage s'efface quand $\delta$ tend vers $1$.
+Avec un dernier tour, comme ici, c'est l'ordre inverse : le dernier à proposer
+domine.
+:::
+
+## Exercice 4. Dissuader l'entrée en s'engageant
+
+Une firme installée (joueur 1, l'*incumbent*) fait face à une entrante potentielle
+(joueur 2). Gains (installée ; entrante).
+
+**Sans engagement.** L'entrante choisit d'entrer ou de rester dehors. Si elle reste
+dehors : $(10\,;\,0)$. Si elle entre, l'installée choisit de **combattre** :
+$(2\,;\,-2)$, ou d'**accommoder** : $(5\,;\,3)$.
+
+**Avec engagement.** Avant tout, l'installée peut **investir** dans une capacité
+supplémentaire, qui coûte $4$ **sauf** si elle l'utilise pour combattre. L'entrante
+observe l'investissement. Si l'installée investit : entrante dehors $(6\,;\,0)$ ;
+entrée suivie d'un combat $(2\,;\,-2)$ ; entrée suivie d'un accommodement
+$(1\,;\,3)$.
+
+1. Sans engagement : écrire la forme stratégique, trouver les équilibres de Nash,
+   puis l'équilibre parfait en sous-jeux.
+2. Avec engagement : dessiner l'arbre complet et résoudre par backward induction.
+3. L'installée a-t-elle intérêt à investir ? Pourquoi une simple annonce « je
+   combattrai » ne suffirait-elle pas ?
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+T4a = ({who: 2, name: "« Entrante »", kids: [
+  {a: "Entrer", n: {who: 1, name: "« Installée »", kids: [
+    {a: "Combattre", n: {pay: [2, -2]}}, {a: "Accommoder", n: {pay: [5, 3]}}]}},
+  {a: "Rester dehors", n: {pay: [10, 0]}}
+]})
+
+T4 = ({who: 1, name: "« Installée, au départ »", kids: [
+  {a: "Ne pas investir", n: {who: 2, name: "« Entrante, sans capacité »", kids: [
+    {a: "Entrer", n: {who: 1, name: "« Installée, sans capacité »", kids: [
+      {a: "Combattre", n: {pay: [2, -2]}}, {a: "Accommoder", n: {pay: [5, 3]}}]}},
+    {a: "Rester dehors", n: {pay: [10, 0]}}]}},
+  {a: "Investir (coût 4)", n: {who: 2, name: "« Entrante, avec capacité »", kids: [
+    {a: "Entrer", n: {who: 1, name: "« Installée, avec capacité »", kids: [
+      {a: "Combattre", n: {pay: [2, -2]}}, {a: "Accommoder", n: {pay: [1, 3]}}]}},
+    {a: "Rester dehors", n: {pay: [6, 0]}}]}}
+]})
+
+html`<p style="font-family:Jost;font-weight:600;margin:.2rem 0">Sans engagement</p>`
+```
+
+```{ojs}
+//| echo: false
+viewof st4a = Inputs.range([0, treeHeight(T4a)], {value: 0, step: 1, label: "étape (sans engagement)"})
+arbre(T4a, st4a)
+```
+
+```{ojs}
+//| echo: false
+html`<p style="font-family:Jost;font-weight:600;margin:1rem 0 .2rem">Avec engagement</p>`
+viewof st4 = Inputs.range([0, treeHeight(T4)], {value: 0, step: 1, label: "étape (avec engagement)"})
+```
+
+```{ojs}
+//| echo: false
+arbre(T4, st4)
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Question 1. Sans engagement.**
+
+*Forme stratégique.* Lignes : l'entrante, $S_E=\{\text{Entrer},\text{Dehors}\}$ ;
+colonnes : l'installée, $S_I=\{\text{Combattre},\text{Accommoder}\}$. Ici la
+stratégie de l'installée est simple : elle ne joue qu'à un nœud. Gains
+(entrante ; installée) :
+
+|  | Combattre | Accommoder |
+|---|---|---|
+| Entrer | (−2 ; 2) | (3 ; 5) |
+| Dehors | (0 ; 10) | (0 ; 10) |
+
+*Équilibres de Nash.* Entrante face à Combattre : $-2$ ou $0$, elle reste dehors.
+Face à Accommoder : $3$ ou $0$, elle entre. Installée face à Entrer : $2$ ou $5$,
+elle accommode. Face à Dehors : $10$ ou $10$, elle est indifférente (les deux
+sont soulignés). Cases soulignées par les deux : $(\text{Entrer},\text{Accommoder})$
+et $(\text{Dehors},\text{Combattre})$.
+
+*Backward induction.* Si l'entrante entre, l'installée compare $2$ (combattre) et
+$5$ (accommoder) : elle accommode. L'entrante, qui l'anticipe, compare entrer
+($3$) et rester dehors ($0$) : elle entre. **Équilibre parfait :**
+(Entrer, Accommoder), gains $(5\,;\,3)$.
+
+$(\text{Dehors},\text{Combattre})$ est un équilibre de Nash **non crédible** : « je
+combattrai si tu entres » n'est pas optimal, puisqu'une fois l'entrée faite
+accommoder rapporte $5>2$. L'entrante n'a aucune raison d'y croire.
+
+**Question 2. Avec engagement.** On résout par le bas.
+
+- Si l'installée n'a pas investi : le sous-jeu est celui de la question 1,
+  résultat $(5\,;\,3)$.
+- Si elle a investi, et que l'entrante est entrée : l'installée compare **combattre**
+  ($2$) et **accommoder** ($1$, car la capacité est payée pour rien). Elle
+  **combat**.
+- L'entrante, qui anticipe cela, compare **entrer** ($-2$) et **rester dehors** ($0$).
+  Elle reste dehors : résultat $(6\,;\,0)$.
+- Au départ, l'installée compare **ne pas investir** ($5$) et **investir** ($6$). Elle
+  investit.
+
+**Équilibre parfait en sous-jeux :** l'installée investit ; l'entrante reste
+dehors si l'installée a investi, entre sinon ; l'installée combat en cas d'entrée
+avec capacité, accommode sans capacité. Chemin d'équilibre : $(6\,;\,0)$.
+
+**Question 3.** Investir rapporte $6$ contre $5$ : oui. **L'installée gagne en
+rendant l'accommodement plus coûteux pour elle-même.** La capacité retire
+une option qu'elle aurait préférée (accommoder) et rend ainsi la menace de
+combattre **crédible** : c'est la logique de l'engagement (Schelling, 1960) appliquée
+par Dixit (1980) aux capacités de production.
+
+**Pourquoi une annonce ne suffit pas.** Dire « je combattrai » ne coûte rien et ne
+change pas les gains : une fois l'entrée faite, accommoder reste préférable
+($5>2$), et l'entrante le sait. C'est le cas de $(\text{Dehors},\text{Combattre})$ :
+un équilibre de Nash, mais pas parfait. L'investissement n'est utile que parce qu'il
+est **irréversible et observé**. Si l'entrante ne le voyait pas, ou si
+l'installée pouvait revendre la capacité sans perte, la menace redeviendrait
+creuse.
+
+**Ce que ça ne dit pas.** Le résultat dépend du coût $K=4$. Notons $K$ le coût de la
+capacité inutilisée. Pour que l'engagement fonctionne, il faut deux choses :
+
+- que la menace soit crédible : combattre ($2$) doit battre accommoder ($5-K$),
+  soit $K>3$ ;
+- que dissuader vaille la peine : $10-K$ doit dépasser les $5$ obtenus sans
+  engagement, soit $K<5$.
+
+L'engagement ne marche donc que pour $3<K<5$. En dessous, accommoder reste
+préférable et la capacité ne convainc personne ; au-dessus, elle coûte plus que
+l'entrée évitée ne rapporte. À $K=6$, l'installée n'investirait plus.
+:::
+
+## Ce qu'il faut savoir refaire seul
+
+1. Passer de l'arbre à la forme stratégique en comptant les stratégies : **une
+   stratégie par combinaison d'actions à tous les nœuds du joueur**.
+2. Appliquer la backward induction en écrivant, à chaque nœud, **les deux gains
+   comparés** et le choix retenu.
+3. Lister les équilibres de Nash, puis dire pour chacun **où** il cesse d'être
+   rationnel (le nœud et l'action fautive) s'il n'est pas parfait.
+4. Interpréter : qui gagne à jouer le premier, qui gagne à jouer le dernier, ce que
+   coûte l'information, ce que l'engagement achète.
+
+## Repères
+
+- Zermelo, E. (1913), « Über eine Anwendung der Mengenlehre auf die Theorie des
+  Schachspiels », *Proceedings of the Fifth International Congress of
+  Mathematicians*.
+- von Stackelberg, H. (1934), *Marktform und Gleichgewicht*, Springer.
+- Kuhn, H. (1953), « Extensive Games and the Problem of Information », dans
+  *Contributions to the Theory of Games II*, Princeton University Press.
+- Selten, R. (1965), « Spieltheoretische Behandlung eines Oligopolmodells mit
+  Nachfrageträgheit », *Zeitschrift für die gesamte Staatswissenschaft* 121.
+- Schelling, T. (1960), *The Strategy of Conflict*, Harvard University Press.
+- Dixit, A. (1980), « The Role of Investment in Entry-Deterrence », *Economic
+  Journal* 90(1).
+- Güth, W., Schmittberger, R. et Schwarze, B. (1982), « An Experimental Analysis of
+  Ultimatum Bargaining », *Journal of Economic Behavior and Organization* 3(4).
+- Rubinstein, A. (1982), « Perfect Equilibrium in a Bargaining Model »,
+  *Econometrica* 50(1).

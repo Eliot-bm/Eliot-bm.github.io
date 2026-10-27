@@ -1,0 +1,210 @@
+---
+title: "S, s, σ, p : qui est qui ?"
+subtitle: "Le vocabulaire des jeux, sur un seul exemple manipulable"
+description: "Ensemble de stratégies, stratégie pure, stratégie mixte, probabilité, gain espéré : cinq objets de nature différente, représentés sur le même jeu 2×2."
+date: 2026-10-27
+categories: [théorie des jeux, notation, L3]
+---
+
+Cette page ne résout aucun exercice. Elle règle un problème de lecture : dans une
+correction de TD, les lettres $S$, $s$, $\sigma$, $p$ et $1-p$ désignent cinq
+objets **de nature différente**, et les confondre fait perdre des points avant
+même le calcul.
+
+## D'où vient cette notation
+
+Les stratégies mixtes ne viennent pas d'une envie de compliquer. Elles viennent
+d'un échec. Dans « pile ou face » à deux joueurs, aucune stratégie pure n'est
+raisonnable : si je joue toujours Pile, mon adversaire l'apprend et joue en
+conséquence. Von Neumann (1928) a vu que la seule issue consiste à **ne pas
+choisir une action, mais à choisir un dosage d'actions**, c'est-à-dire une loterie.
+C'est ce changement d'objet qui explique la notation : une stratégie mixte n'est
+plus un élément de l'ensemble des actions, c'est un point d'un autre ensemble,
+construit à partir du premier.
+
+Nash (1951) a repris cette construction pour $n$ joueurs et montré que, une fois
+les loteries admises, un équilibre existe toujours. D'où la phrase que vous
+entendez en cours : « il existe toujours un équilibre de Nash, *en stratégies
+mixtes* ». Sans loteries, la phrase est fausse (pile ou face n'a pas d'équilibre
+pur).
+
+## Le dictionnaire
+
+On prend le joueur 1 (lignes) avec deux stratégies pures, $H$ et $B$.
+
+| Objet | Notation | Nature | Dans l'exemple |
+|---|---|---|---|
+| Ensemble des stratégies pures | $S_1$ | un **ensemble** (le menu) | $S_1=\{H,B\}$ |
+| Une stratégie pure | $s_1$ | un **élément** de $S_1$ (un plat du menu) | $s_1=H$ |
+| Une stratégie mixte | $\sigma_1$ | une **loterie** sur $S_1$ (un dosage) | $\sigma_1=(p,\,1-p)$ |
+| L'ensemble de toutes les loteries | $\Delta(S_1)$ | un **ensemble** de loteries (tous les dosages possibles) | le segment $[0,1]$ |
+| Une probabilité | $p$ | un **nombre** de $[0,1]$ | $p=\sigma_1(H)$ |
+| Son complément | $1-p$ | un **nombre** | $1-p=\sigma_1(B)$ |
+| Un profil de stratégies pures | $s=(s_1,s_2)$ | **une case** de la matrice | $(H,G)$ |
+| Gain d'un profil pur | $u_1(s_1,s_2)$ | un **nombre** lu dans la case | $u_1(H,G)=4$ |
+| Gain espéré d'un profil mixte | $U_1(\sigma_1,\sigma_2)$ | un **nombre**, moyenne des gains pondérée par les probabilités | voir ci-dessous |
+
+Pour retenir : **majuscule = ensemble, minuscule = élément, lettre grecque =
+loterie, $p$ = un seul nombre dans la loterie.** Une stratégie pure est un cas
+particulier de stratégie mixte : $H$ s'écrit $\sigma_1=(1,0)$, $B$ s'écrit
+$\sigma_1=(0,1)$.
+
+[À toi : aligne ces symboles sur ceux du cours de M. Souam. Si son manuel écrit
+$\Sigma_i$ ou $X_i$ à la place de $\Delta(S_i)$, c'est le moment de le dire aux
+étudiants, une fois, ici.]
+
+## Un jeu, tous les objets
+
+Le jeu ci-dessous n'est pas un exercice du TD : ses gains sont arbitraires, choisis
+pour que les nombres se lisent facilement. Le joueur 1 choisit $p$, la probabilité
+de jouer $H$ ; le joueur 2 choisit $q$, la probabilité de jouer $G$.
+
+```{ojs}
+//| echo: false
+import {C, plotStyle, fr, toNode, matrixTable, gains2x2, mosaicSVG, simplexSVG} from "./gt.js"
+
+A = [[4, 0], [2, 3]]
+B = [[1, 3], [2, 0]]
+```
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+toNode(matrixTable(A, B, ["H", "B"], ["G", "D"], {rowTitle: "Joueur 1", colTitle: "Joueur 2"}))
+```
+
+```{ojs}
+//| echo: false
+viewof p = Inputs.range([0, 1], {value: 0.6, step: 0.05, label: "p (joueur 1 joue H)"})
+viewof q = Inputs.range([0, 1], {value: 0.4, step: 0.05, label: "q (joueur 2 joue G)"})
+```
+
+```{ojs}
+//| echo: false
+g = gains2x2(A, B, p, q)
+
+// Gain espéré du joueur 1 si il joue H pur / B pur, face à la loterie (q, 1-q) du joueur 2.
+uH = q * A[0][0] + (1 - q) * A[0][1]
+uB = q * A[1][0] + (1 - q) * A[1][1]
+
+toNode(mosaicSVG(A, B, p, q, ["H", "B"], ["G", "D"]))
+```
+
+```{ojs}
+//| echo: false
+html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
+  <b>Lecture.</b> Chaque rectangle est une case de la matrice. Son <b>aire</b> est
+  la probabilité que cette case soit jouée : largeur <i>q</i> ou 1−<i>q</i> pour le
+  joueur 2, hauteur <i>p</i> ou 1−<i>p</i> pour le joueur 1. Les quatre aires somment à 1.
+  <br><br>
+  Gain espéré du joueur 1&nbsp;:
+  U₁ = ${fr(g.w[0],3)} × 4 + ${fr(g.w[1],3)} × 0 + ${fr(g.w[2],3)} × 2 + ${fr(g.w[3],3)} × 3 = <b>${fr(g.u1,3)}</b>
+</p>`
+```
+
+:::
+
+::: {.callout-note}
+## À regarder
+
+- Mettez $p=1$ : le rectangle du bas disparaît. Le joueur 1 joue $H$ avec
+  certitude, et sa « stratégie mixte » est devenue la stratégie pure $H$. Une
+  stratégie pure est une loterie dégénérée.
+- Faites varier $q$ seul. Les colonnes changent de largeur, **pas les lignes**.
+  $q$ appartient au joueur 2 : le joueur 1 ne peut pas le choisir, il ne peut que
+  s'y adapter.
+- Le gain espéré est une moyenne : il ne peut pas sortir de l'intervalle des gains
+  de la matrice. Vérifiez-le avec $p=q=0{,}5$.
+:::
+
+## Pourquoi le gain espéré est « linéaire en $p$ »
+
+C'est la phrase de cours qui sert à tout résoudre, et l'image la rend évidente.
+Fixons $q$. Si le joueur 1 joue $H$ pur, il espère $u_H$ ; s'il joue $B$ pur, il
+espère $u_B$. S'il dose avec $p$, son gain espéré est $p\,u_H+(1-p)\,u_B$ : un point
+sur le segment qui relie $u_B$ à $u_H$.
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 560, height: 300, style: plotStyle,
+  marginLeft: 56, marginBottom: 46,
+  x: {domain: [0, 1], label: "p, probabilité de jouer H →"},
+  y: {domain: [0, 4.2], label: "↑ gain espéré du joueur 1"},
+  marks: [
+    Plot.line([[0, uB], [1, uH]], {stroke: C.indigo, strokeWidth: 2.4}),
+    Plot.dot([[0, uB]], {fill: C.umber, r: 5}),
+    Plot.dot([[1, uH]], {fill: C.umber, r: 5}),
+    Plot.text([[0.02, uB]], {text: [`B pur : ${fr(uB)}`], textAnchor: "start", dy: -12, fill: C.umber}),
+    Plot.text([[0.98, uH]], {text: [`H pur : ${fr(uH)}`], textAnchor: "end", dy: -12, fill: C.umber}),
+    Plot.ruleX([p], {stroke: C.crimson, strokeDasharray: "4,3"}),
+    Plot.dot([[p, p * uH + (1 - p) * uB]], {fill: C.crimson, r: 6.5, stroke: "white"}),
+    Plot.ruleY([0], {stroke: C.ink, strokeOpacity: .25})
+  ]
+})
+```
+
+Deux conséquences que vous réutiliserez tout le semestre.
+
+1. **Un mélange ne peut jamais faire mieux que le meilleur de ses ingrédients.** Le
+   point rouge est toujours entre les deux points bruns. Si $u_H>u_B$, la seule
+   meilleure réponse est $p=1$. Si $u_H<u_B$, c'est $p=0$.
+2. **Un seul cas autorise un vrai dosage : $u_H=u_B$.** Alors la droite est
+   horizontale, tous les $p$ rapportent la même chose, et n'importe quel $p$ est
+   une meilleure réponse. C'est la condition d'**indifférence**, et c'est elle que
+   vous écrivez pour trouver un équilibre mixte.
+
+## Trois stratégies : le triangle
+
+Avec deux stratégies pures, $\Delta(S_1)$ est un segment, et un seul nombre $p$
+suffit. Avec trois, il faut deux nombres, car la troisième probabilité est
+$1-p_1-p_2$. L'ensemble $\Delta(S_1)$ devient un triangle.
+
+```{ojs}
+//| echo: false
+viewof pH = Inputs.range([0, 1], {value: 0.5, step: 0.05, label: "probabilité de H"})
+viewof pMraw = Inputs.range([0, 1], {value: 0.3, step: 0.05, label: "probabilité de M"})
+```
+
+```{ojs}
+//| echo: false
+pM = Math.min(pMraw, 1 - pH)
+pB = Math.max(0, 1 - pH - pM)
+
+{
+  const tri = toNode(simplexSVG(["H", "M", "B"], [pH, pM, pB]));
+  const cap = html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
+    σ₁ = (${fr(pH)} ; ${fr(pM)} ; ${fr(pB)}) — la
+    troisième coordonnée est imposée : p_B = 1 − p_H − p_M.</p>`;
+  return html`<div>${tri}${cap}</div>`;
+}
+```
+
+Les trois sommets sont les trois stratégies pures. Les côtés sont les mélanges de
+deux d'entre elles. L'intérieur est un mélange des trois. Un équilibre mixte dont
+le joueur n'utilise que $H$ et $M$ vit sur le côté $H$–$M$ : on dit que son
+**support** est $\{H,M\}$.
+
+## Les erreurs de lecture les plus fréquentes
+
+| On écrit | Le problème | On écrit plutôt |
+|---|---|---|
+| « $S_1 = H$ » | un ensemble égalé à un élément | $S_1=\{H,B\}$ et $s_1=H$ |
+| « $p = (0{,}6\ ;\ 0{,}4)$ » | $p$ est un nombre, pas un couple | $\sigma_1=(0{,}6\ ;\ 0{,}4)$, soit $p=0{,}6$ |
+| « Le joueur 1 joue $H$ avec probabilité $q$ » | $q$ appartient au joueur 2 | « le joueur 1 joue $H$ avec probabilité $p$ » |
+| « L'équilibre est $p=1/3$ » | un équilibre est un **profil** : il faut les deux joueurs | $(\sigma_1^*,\sigma_2^*)=\big((\tfrac13,\tfrac23),(\tfrac14,\tfrac34)\big)$, par exemple |
+| « J'ai résolu $U_1(H)=U_1(B)$ pour trouver $p$ » | c'est l'indifférence du joueur **2** qui détermine $p$ | écrire l'indifférence de l'autre joueur, pas la sienne |
+| « $1-p$ » pour un jeu 3×3 | avec trois stratégies, $1-p$ ne suffit plus | $(p_1,p_2,1-p_1-p_2)$ |
+
+La cinquième ligne est la plus déroutante, et elle mérite une phrase. **La
+probabilité $p$ du joueur 1 est fixée pour que le joueur 2 soit indifférent**, pas
+le joueur 1. À l'équilibre, chaque joueur dose de manière à rendre l'autre
+indifférent. C'est contre-intuitif la première fois, et les exercices de la page
+[jeux simultanés](simultane.qmd) le montrent sur un cas où l'on peut le *voir*.
+
+## Repères
+
+- von Neumann, J. (1928), « Zur Theorie der Gesellschaftsspiele », *Mathematische
+  Annalen* 100.
+- Nash, J. (1951), « Non-Cooperative Games », *Annals of Mathematics* 54(2).

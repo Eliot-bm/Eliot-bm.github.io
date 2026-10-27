@@ -1,0 +1,71 @@
+---
+title: "Théorie des jeux"
+subtitle: "L3, Université Paris Nanterre, 2026-2027"
+description: "Travaux dirigés de théorie des jeux en L3. Compagnons interactifs des séances."
+date: 2026-09-08
+categories: [théorie des jeux, microéconomie, L3]
+---
+
+[À toi : deux phrases. Ce que l'étudiant saura faire à la fin, pas la liste des
+chapitres.]
+
+## D'où vient ce champ
+
+La théorie des jeux naît d'un livre unique, la *Theory of Games and Economic
+Behavior* de von Neumann et Morgenstern (1944). Le projet était de refonder la
+théorie économique sur l'interaction stratégique plutôt que sur l'optimisation
+isolée : chez Walras, l'agent fait face à des prix ; ici, il fait face à quelqu'un
+qui réfléchit aussi. Leur résultat central ne couvrait que les jeux à somme nulle
+à deux joueurs.
+
+Nash (1950, 1951) a levé cette limite en définissant un équilibre pour n joueurs
+et des intérêts quelconques, et en démontrant son existence. C'est ce concept qui
+a fait de la théorie des jeux l'outil ordinaire de l'économie. Les trois décennies
+suivantes en ont raffiné les insuffisances : Selten pour les équilibres non
+crédibles, Harsanyi pour l'information incomplète, Schelling pour l'usage
+stratégique de l'engagement.
+
+[À toi : ce que tu veux garder de ce cadrage, et l'accroche vers ta première
+séance.]
+
+## Les séances
+
+| # | Séance | Page interactive |
+|---|---|---|
+| 1 | [titre] | *à venir* |
+| 2 | [titre] | *à venir* |
+
+[À toi : la table des séances, une fois la plaquette de TD arrêtée.]
+
+## Exercices corrigés et visualisations
+
+Des exercices **inédits**, qui ne reprennent aucun énoncé des fiches de TD, corrigés
+en détail. La correction est repliée : cherchez d'abord.
+
+- [S, s, σ, p : qui est qui ?](notation.qmd) — l'ensemble des
+  stratégies, une stratégie, une stratégie mixte, une probabilité, représentés sur un seul jeu.
+- [Jeux simultanés](simultane.qmd) — dominance, équilibre de
+  Nash en stratégies pures, équilibre en stratégies mixtes (4 exercices).
+- [Jeux séquentiels](sequentiel.qmd) — forme extensive,
+  backward induction, équilibre parfait en sous-jeux (4 exercices).
+
+## Comment se servir de ces pages
+
+Les pages de séance ne contiennent aucune correction. Chaque page raconte d'où vient
+le concept et quel problème il résout, puis rend manipulable une hypothèse de
+l'énoncé pour vous laisser constater ce qui casse quand elle tombe.
+
+Les pages d'exercices corrigés contiennent des corrections, sur des énoncés qui ne
+sont pas ceux du TD. Elles montrent la démarche à rédiger.
+
+Le calcul reste à faire sur papier. C'est lui qui est évalué.
+
+## Repères bibliographiques
+
+- von Neumann, J. et Morgenstern, O. (1944), *Theory of Games and Economic
+  Behavior*, Princeton University Press.
+- Nash, J. (1950), « Equilibrium Points in n-Person Games », *PNAS* 36(1).
+- Nash, J. (1951), « Non-Cooperative Games », *Annals of Mathematics* 54(2).
+- Schelling, T. (1960), *The Strategy of Conflict*, Harvard University Press.
+
+[À toi : le manuel que tu imposes aux étudiants.]

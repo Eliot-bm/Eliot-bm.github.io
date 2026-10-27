@@ -1,0 +1,572 @@
+---
+title: "Jeux simultanés : quatre exercices corrigés"
+subtitle: "Dominance, équilibre de Nash en stratégies pures, équilibre en stratégies mixtes"
+description: "Quatre exercices inédits, corrigés étape par étape : élimination des stratégies dominées, meilleures réponses soulignées, indifférence et correspondances de meilleure réponse dans le carré (p, q)."
+date: 2026-10-27
+categories: [théorie des jeux, jeux simultanés, L3]
+---
+
+Ces exercices complètent les fiches de TD 1 et 2. Ils ne reprennent aucun énoncé de
+la fiche : les matrices sont nouvelles, pour que vous puissiez refaire la méthode
+sans reconnaître la réponse.
+
+**Mode d'emploi.** Cherchez sur papier d'abord. Dépliez la correction
+seulement ensuite, et comparez *la démarche*, pas seulement le résultat. Les
+figures servent à voir ce que le calcul fait ; elles ne remplacent pas la
+rédaction attendue à l'examen. Si $S$, $s$, $\sigma$ ou $p$ vous échappent encore,
+passez d'abord par la page [S, s, σ, p : qui est qui ?](notation.qmd).
+
+## D'où viennent ces trois outils
+
+Ils répondent à trois questions de plus en plus fortes sur ce qu'un joueur peut
+savoir de l'autre.
+
+**Éliminer les stratégies dominées** ne suppose que ceci : un joueur rationnel ne
+joue jamais une stratégie qui rapporte strictement moins qu'une autre, *quoi que
+fasse l'adversaire*. Aucune croyance sur l'adversaire n'est nécessaire au premier
+tour. Mais pour répéter l'opération, il faut que chacun sache que l'autre est
+rationnel, et que l'autre sache qu'il le sait, et ainsi de suite : c'est la
+**connaissance commune de la rationalité**. L'élimination itérée est donc
+une hypothèse plus lourde qu'elle n'en a l'air.
+
+**L'équilibre de Nash** (1950) change de question. On ne demande plus ce qu'un
+joueur ne jouera jamais, mais quel profil est stable : personne n'a intérêt à
+dévier *si les autres ne dévient pas*. Cournot (1838) avait déjà utilisé cette
+idée pour le duopole de quantités, sans la formuler en général. Le prix à payer :
+l'équilibre peut être multiple (exercice 2), et rien dans le concept ne dit lequel
+sera joué.
+
+**Les stratégies mixtes** (von Neumann, 1928 ; Nash, 1951) répondent à un autre
+problème : certains jeux n'ont aucun équilibre en stratégies pures (exercice 4).
+Ce n'est pas un détail technique. Dans une inspection, un contrôle annoncé ne
+contrôle rien ; il faut être imprévisible.
+
+| Si l'énoncé demande… | Outil | Ce qu'on vérifie |
+|---|---|---|
+| ce qui survit à la rationalité | élimination itérée (exercice 1) | $u_i(s_i',s_{-i})>u_i(s_i,s_{-i})$ pour **tout** $s_{-i}$ |
+| les profils stables | meilleures réponses soulignées (exercice 2) | les deux joueurs soulignés dans la même case |
+| un équilibre sans case stable | indifférence (exercices 3 et 4) | l'adversaire n'a aucune déviation rentable |
+
+```{ojs}
+//| echo: false
+import {C, plotStyle, fr, toNode, eissd, pureNE, matrixTable, gains2x2, br2x2, eqMarks} from "./gt.js"
+```
+
+## Exercice 1. Éliminer, tour après tour
+
+Deux entreprises, **1** (lignes : $H$, $M$, $B$) et **2** (colonnes : $G$, $C$, $D$),
+choisissent chacune une stratégie de gamme. Gains (entreprise 1 ; entreprise 2) :
+
+|  | $G$ | $C$ | $D$ |
+|---|---|---|---|
+| $H$ | (4 ; 0) | (4 ; 3) | (0 ; 5) |
+| $M$ | (3 ; 1) | (5 ; 3) | (2 ; 1) |
+| $B$ | (5 ; 3) | (0 ; 5) | (5 ; 2) |
+
+1. Écrire $S_1$ et $S_2$.
+2. Quelles stratégies survivent à l'élimination itérée des stratégies strictement
+   dominées (EISSD) ?
+3. Le résultat dépend-il de l'ordre dans lequel on élimine ?
+
+Faites avancer le curseur pour voir le jeu rétrécir.
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+A1 = [[4, 4, 0], [3, 5, 2], [5, 0, 5]]
+B1 = [[0, 3, 5], [1, 3, 1], [3, 5, 2]]
+E1 = eissd(A1, B1)
+rn1 = ["H", "M", "B"]
+cn1 = ["G", "C", "D"]
+viewof tour = Inputs.range([0, E1.rounds.length], {value: 0, step: 1, label: "tour d'élimination"})
+```
+
+```{ojs}
+//| echo: false
+dead1 = ({
+  rows: E1.rounds.slice(0, tour).flatMap(r => r.rows.map(d => d.i)),
+  cols: E1.rounds.slice(0, tour).flatMap(r => r.cols.map(d => d.i))
+})
+
+{
+  const tab = toNode(matrixTable(A1, B1, rn1, cn1, {deadRows: dead1.rows, deadCols: dead1.cols, rowTitle: "Entreprise 1", colTitle: "Entreprise 2"}));
+  let msg;
+  if (tour === 0) msg = "Jeu complet. Aucune élimination faite.";
+  else {
+    const r = E1.rounds[tour - 1];
+    const parts = [
+      ...r.rows.map(d => `l'entreprise 1 élimine <b>${rn1[d.i]}</b> (dominée par ${rn1[d.by]})`),
+      ...r.cols.map(d => `l'entreprise 2 élimine <b>${cn1[d.i]}</b> (dominée par ${cn1[d.by]})`)
+    ];
+    msg = `Tour ${tour} : ${parts.join(" ; ")}.`;
+  }
+  const fin = tour === E1.rounds.length
+    ? ` Plus rien à éliminer : il reste (${rn1[E1.rows[0]]} ; ${cn1[E1.cols[0]]}).` : "";
+  return html`<div>${tab}<div style="font-family:Jost;font-size:.9rem;max-width:34rem">${toNode(msg + fin)}</div></div>`;
+}
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Étape 1. Notation.** Les ensembles de stratégies pures sont
+$S_1=\{H,M,B\}$ et $S_2=\{G,C,D\}$. Il y a $3\times3=9$ profils, un par case.
+
+**Étape 2. Chercher une stratégie dominée, tour par tour.** Une stratégie $s_i$ est
+*strictement dominée* par $s_i'$ si $s_i'$ rapporte **strictement** plus que $s_i$
+contre **chacune** des stratégies de l'adversaire. Une seule colonne où $s_i'$ fait
+égal ou moins suffit à casser la dominance. On compare donc les stratégies deux à
+deux, **dans l'ordre des gains du joueur concerné**.
+
+*Tour 1.* Joueur 1 (gains lus dans la 1re coordonnée) : contre $G$, $C$, $D$ il obtient
+
+- $H$ : $4,\ 4,\ 0$ ; $M$ : $3,\ 5,\ 2$ ; $B$ : $5,\ 0,\ 5$.
+
+Aucune ligne ne bat une autre partout : $H$ bat $M$ contre $G$ ($4>3$) mais pas
+contre $C$ ; $B$ bat $M$ contre $G$ et $D$ mais pas contre $C$ ($0<5$). **Aucune
+stratégie du joueur 1 n'est dominée à ce stade.**
+
+Joueur 2 (2e coordonnée) : contre $H$, $M$, $B$ il obtient
+
+- $G$ : $0,\ 1,\ 3$ ; $C$ : $3,\ 3,\ 5$ ; $D$ : $5,\ 1,\ 2$.
+
+$C$ bat $G$ partout : $3>0$, $3>1$, $5>3$. **$G$ est strictement dominée par $C$.**
+On pourrait croire que $D$ domine aussi $G$ : $5>0$ contre $H$. Mais contre $M$ les
+deux font $1$ (égalité, donc pas de dominance *stricte*), et contre $B$ $D$ fait
+moins ($2<3$). Seule $G$ est éliminée au tour 1. On la retire.
+
+*Tour 2.* Il reste les colonnes $C,D$. Joueur 1 : $H$ : $4,\ 0$ ; $M$ : $5,\ 2$ ;
+$B$ : $0,\ 5$. Maintenant $M$ bat $H$ ($5>4$ et $2>0$) : **$H$ est dominée par $M$.**
+(Elle ne l'était pas au tour 1, parce que $G$ était encore là : contre $G$, $H$
+rapportait $4>3$.) $B$ n'est pas dominée : elle rapporte $5$ contre $D$. On retire $H$.
+
+*Tour 3.* Il reste les lignes $M,B$. Joueur 2 : contre $M$ et $B$,
+$C$ : $3,\ 5$ ; $D$ : $1,\ 2$. **$C$ domine $D$** ($3>1$ et $5>2$). On retire $D$.
+
+*Tour 4.* Reste la colonne $C$. Joueur 1 : $M$ rapporte $5$, $B$ rapporte $0$.
+**$M$ domine $B$.** On retire $B$.
+
+**Étape 3. Conclusion.** Il survit un seul profil : $(M,C)$, de gains $(5\,;\,3)$.
+
+**Étape 4. L'ordre importe-t-il ?** Non, pour la dominance **stricte**. Une stratégie
+strictement dominée le reste quand l'adversaire perd des options, donc retirer
+d'abord une autre stratégie ne la sauve jamais. Le résultat final est le même
+quel que soit l'ordre. (Ce n'est plus vrai pour la dominance *faible*, où l'ordre
+peut changer le résultat.)
+
+**Ce que ça ne dit pas.** Chaque élimination suppose que l'adversaire a déjà
+éliminé la sienne : $H$ n'est écartée qu'*en sachant* que l'entreprise 2 ne jouera
+pas $G$. Ici il faut quatre tours : le résultat repose sur la connaissance commune de la
+rationalité, poussée assez loin pour que chaque tour soit justifié. Si un joueur
+doute que l'autre raisonne ainsi, l'élimination s'arrête avant.
+:::
+
+## Exercice 2. Plusieurs équilibres, aucune dominance
+
+Même format (gains : joueur 1 ; joueur 2), jeu $3\times3$ :
+
+|  | $G$ | $C$ | $D$ |
+|---|---|---|---|
+| $H$ | (6 ; 3) | (3 ; 1) | (0 ; 2) |
+| $M$ | (0 ; 2) | (5 ; 5) | (3 ; 3) |
+| $B$ | (1 ; 0) | (2 ; 5) | (4 ; 3) |
+
+1. Y a-t-il des stratégies strictement dominées ?
+2. Déterminer tous les équilibres de Nash en stratégies pures.
+3. Comparer les équilibres au sens de Pareto. Lequel prédire ?
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+A2 = [[6, 3, 0], [0, 5, 3], [1, 2, 4]]
+B2 = [[3, 1, 2], [2, 5, 3], [0, 5, 3]]
+viewof show2 = Inputs.toggle({label: "souligner les meilleures réponses", value: false})
+```
+
+```{ojs}
+//| echo: false
+{
+  const tab = toNode(matrixTable(A2, B2, ["H", "M", "B"], ["G", "C", "D"], {underline: show2, rowTitle: "Joueur 1", colTitle: "Joueur 2"}));
+  const ne = pureNE(A2, B2).map(([i, j]) => `(${["H", "M", "B"][i]} ; ${["G", "C", "D"][j]})`);
+  const cap = show2
+    ? `<p style="font-family:Jost;font-size:.9rem;max-width:34rem"><span style="border-bottom:2px solid ${C.indigo}">Bleu</span> : meilleure réponse du joueur 1, colonne par colonne. <span style="border-bottom:2px solid ${C.crimson}">Rouge</span> : meilleure réponse du joueur 2, ligne par ligne. Case dorée : les deux. Équilibres : ${ne.join(" et ")}.</p>`
+    : `<p style="font-family:Jost;font-size:.9rem;max-width:34rem">Cherchez d'abord sur papier, puis cochez la case.</p>`;
+  return html`<div>${tab}${toNode(cap)}</div>`;
+}
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Étape 1. Dominance.** Gains du joueur 1 : $H$ : $6,3,0$ ; $M$ : $0,5,3$ ; $B$ : $1,2,4$.
+$H$ gagne contre $G$ mais perd contre $D$ ; $M$ gagne contre $C$ ; $B$ gagne contre $D$.
+Aucune ligne ne bat une autre partout. Gains du joueur 2 : $G$ : $3,2,0$ ;
+$C$ : $1,5,5$ ; $D$ : $2,3,3$. $C$ bat $D$ contre $M$ et $B$ ($5>3$ et $5>3$) mais
+pas contre $H$ ($1<2$) ; $G$ est meilleure que $C$ contre $H$ seulement.
+**Aucune stratégie strictement dominée** : l'EISSD n'élimine rien et ne dit rien
+ici. Il faut un autre outil.
+
+**Étape 2. Souligner les meilleures réponses.** On procède **colonne par colonne**
+pour le joueur 1, **ligne par ligne** pour le joueur 2.
+
+*Joueur 1.* Contre $G$ : ses gains sont $6,0,1$, le meilleur est $6$ (ligne $H$).
+Contre $C$ : $3,5,2$, le meilleur est $5$ ($M$). Contre $D$ : $0,3,4$, le meilleur
+est $4$ ($B$). On souligne donc le 1er gain dans les cases $(H,G)$, $(M,C)$, $(B,D)$.
+
+*Joueur 2.* Contre $H$ : ses gains sont $3,1,2$, le meilleur est $3$ ($G$). Contre
+$M$ : $2,5,3$, meilleur $5$ ($C$). Contre $B$ : $0,5,3$, meilleur $5$ ($C$). On
+souligne le 2e gain dans $(H,G)$, $(M,C)$, $(B,C)$.
+
+**Étape 3. Lire l'intersection.** Un équilibre de Nash est une case où **les deux**
+gains sont soulignés : $(H,G)$ et $(M,C)$. Ce sont les deux équilibres en
+stratégies pures, de gains $(6\,;\,3)$ et $(5\,;\,5)$.
+
+*Piège.* $(B,D)$ n'est pas un équilibre : le joueur 1 y joue sa meilleure réponse
+à $D$, mais le joueur 2, face à $B$, préfère $C$ ($5>3$). Il manque un souligné.
+
+**Étape 4. Pareto.** $(H,G)$ donne plus au joueur 1, $(M,C)$ donne plus au joueur 2.
+Aucun des deux n'est meilleur que l'autre pour tout le monde : ils ne sont **pas
+comparables** au sens de Pareto. Ni l'un ni l'autre n'est dominé par une autre
+case du tableau, donc les deux sont des optima de Pareto.
+
+**Étape 5. Lequel prédire ?** Le concept de Nash ne tranche pas : chaque joueur a
+intérêt à rester dans l'équilibre *dont il est sûr que l'autre l'a choisi*. Le
+joueur 1 préfère $(H,G)$, le joueur 2 préfère $(M,C)$. Pour sortir de là, il
+faut une information extérieure au jeu : une convention, un précédent, un
+**point focal** (Schelling, 1960). Mettre une phrase là-dessus à l'examen
+rapporte plus que de redire qu'il y a deux équilibres.
+:::
+
+## Exercice 3. Chasse au cerf : pures et mixte
+
+Deux chasseurs choisissent chacun de chasser le cerf ($C$) ou le lièvre ($L$).
+Le cerf ne se prend qu'à deux ; le lièvre se prend seul. Gains (chasseur 1 ;
+chasseur 2) :
+
+|  | $C$ | $L$ |
+|---|---|---|
+| $C$ | (4 ; 4) | (0 ; 3) |
+| $L$ | (3 ; 0) | (3 ; 3) |
+
+1. Déterminer les équilibres de Nash en stratégies pures.
+2. Soit $p$ la probabilité que le chasseur 1 joue $C$ et $q$ celle que le chasseur 2
+   joue $C$. Déterminer l'équilibre en stratégies mixtes.
+3. Calculer les gains espérés à cet équilibre et les comparer à ceux des équilibres purs.
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+A3 = [[4, 0], [3, 3]]
+B3 = [[4, 3], [0, 3]]
+brs3 = br2x2(A3, B3)
+
+Plot.plot({
+  width: 520, height: 520, style: plotStyle,
+  marginLeft: 58, marginBottom: 52, marginTop: 20, marginRight: 24,
+  x: {domain: [-0.04, 1.04], label: "p : probabilité que le chasseur 1 joue C →", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
+  y: {domain: [-0.04, 1.04], label: "↑ q : probabilité que le chasseur 2 joue C", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
+  marks: [
+    Plot.line(brs3.rowPath, {x: "x", y: "y", z: "g", stroke: C.indigo, strokeWidth: 3.5}),
+    Plot.line(brs3.colPath, {x: "x", y: "y", z: "g", stroke: C.crimson, strokeWidth: 3.5}),
+    ...eqMarks(Plot, brs3.eq)
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
+  <span style="color:${C.indigo};font-weight:600">Bleu</span> : meilleure réponse du chasseur 1
+  (le <i>p</i> qu'il choisit, selon le <i>q</i> de l'autre).
+  <span style="color:${C.crimson};font-weight:600">Rouge</span> : meilleure réponse du chasseur 2.
+  <span style="color:${C.olive};font-weight:600">Points verts</span> : les intersections,
+  c'est-à-dire les équilibres. Il y en a ${brs3.eq.length}.</p>`
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Étape 1. Notation.** $S_1=S_2=\{C,L\}$. La stratégie mixte du chasseur 1 est
+$\sigma_1=(p,\,1-p)$ sur $(C,L)$ ; celle du chasseur 2 est $\sigma_2=(q,\,1-q)$.
+Le jeu est symétrique : les deux chasseurs ont les mêmes gains, rôles échangés.
+
+**Étape 2. Équilibres purs (souligner).** Chasseur 1 face à $C$ : $4$ ou $3$, il joue $C$.
+Face à $L$ : $0$ ou $3$, il joue $L$. Le jeu est symétrique : la meilleure réponse
+du chasseur 2 à $C$ est $C$, et à $L$ est $L$. Cases soulignées par les deux : $(C,C)$ et $(L,L)$.
+Les gains sont $(4\,;\,4)$ et $(3\,;\,3)$.
+
+**Étape 3. Équilibre mixte, par l'indifférence.** On cherche $p$ tel que le
+**chasseur 2** soit indifférent entre $C$ et $L$ (c'est là que se trouve le piège
+de lecture : on utilise les gains de l'autre joueur).
+
+Gain espéré du chasseur 2 s'il joue $C$, face à $\sigma_1$ :
+$$U_2(C,\sigma_1)=4p+0\cdot(1-p)=4p.$$
+S'il joue $L$ :
+$$U_2(L,\sigma_1)=3p+3(1-p)=3.$$
+Indifférence : $4p=3$, donc $p^*=\tfrac34$.
+
+Par symétrie, le chasseur 1 est indifférent quand $q^*=\tfrac34$. On vérifie :
+$U_1(C,\sigma_2)=4q=3$ et $U_1(L,\sigma_2)=3q+3(1-q)=3$. ✓.
+
+**L'équilibre mixte est donc**
+$$(\sigma_1^*,\sigma_2^*)=\Big(\big(\tfrac34,\tfrac14\big),\ \big(\tfrac34,\tfrac14\big)\Big).$$
+
+**Pourquoi c'est bien un équilibre.** À $p=\tfrac34$, le chasseur 2 obtient $3$
+quelle que soit sa stratégie, pure ou mixte : aucune déviation ne lui rapporte
+plus. La même chose vaut pour le chasseur 1 à $q=\tfrac34$. Personne n'a de
+déviation rentable. Dans un jeu $2\times2$, l'indifférence suffit à le garantir
+(le gain espéré est une droite de $p$, voir [la page de notation](notation.qmd)).
+
+**Étape 4. Gains espérés.** Probabilité de chaque case : $\tfrac9{16}$ pour $(C,C)$,
+$\tfrac3{16}$ pour $(C,L)$, $\tfrac3{16}$ pour $(L,C)$, $\tfrac1{16}$ pour $(L,L)$.
+$$U_1=\tfrac9{16}\cdot4+\tfrac3{16}\cdot0+\tfrac3{16}\cdot3+\tfrac1{16}\cdot3=\tfrac{36+0+9+3}{16}=3.$$
+Même résultat que $U_1(L,\sigma_2)=3$, comme il se doit : un joueur indifférent
+obtient, en mélangeant, exactement le gain de chacune de ses stratégies pures
+utilisées. Le chasseur 2 obtient aussi $3$.
+
+**Étape 5. Comparaison.** À l'équilibre mixte, les chasseurs gagnent $3$ chacun,
+autant que dans $(L,L)$ et moins que dans $(C,C)$ ($4$). Pire : ils manquent la
+chasse commune dans $1-\tfrac9{16}=\tfrac7{16}\approx44\,\%$ des cas, et dans
+$\tfrac6{16}=37{,}5\,\%$ des cas l'un joue $C$ pendant que l'autre joue $L$ : celui
+qui a joué $C$ rentre sans rien. L'équilibre mixte ne fait donc pas mieux que
+$(L,L)$ en gain espéré ($3$ contre $3$), et il ajoute un risque d'échec de
+coordination que $(L,L)$ n'a pas.
+
+Sur la figure, les trois équilibres sont les trois points où les courbes se
+croisent : deux coins (les purs) et un point à l'intérieur (le mixte). En règle
+générale, un jeu
+$2\times2$ qui a **deux** équilibres purs en a un troisième, mixte.
+
+**Remarque.** $L$ garantit $3$ quoi que fasse l'autre ; $C$ peut rapporter $0$. C'est
+ce qui fait de $(L,L)$ l'équilibre « prudent », et de $(C,C)$ l'équilibre
+« coopératif » : c'est la question que Rousseau pose, dans le *Discours sur
+l'origine de l'inégalité* (1755), à propos de la confiance entre chasseurs.
+:::
+
+## Exercice 4. Un contrôle qu'on ne peut pas annoncer
+
+Un employeur (joueur 1) et un salarié (joueur 2). Le salarié peut travailler ($T$)
+ou tirer au flanc ($F$) ; l'employeur peut contrôler ($K$) ou ne pas contrôler ($N$).
+
+- Si le salarié travaille, la production vaut $10$ pour l'employeur ; sinon, $0$.
+- Le salaire est $w=6$. Il est versé dans tous les cas, **sauf** si le salarié est
+  contrôlé et qu'il a tiré au flanc : il n'est alors pas payé.
+- Travailler coûte $2$ au salarié (effort).
+- Contrôler coûte $1$ à l'employeur.
+
+Gain de l'employeur = production − salaire versé − coût du contrôle. Gain du
+salarié = salaire reçu − effort.
+
+1. Écrire la matrice des gains.
+2. Montrer qu'il n'existe pas d'équilibre en stratégies pures.
+3. Déterminer l'équilibre en stratégies mixtes ($p$ = probabilité de $K$, $q$ =
+   probabilité de $T$).
+4. Calculer les gains espérés.
+5. Le salaire passe à $w=8$. Que deviennent $p^*$, $q^*$ et les gains ? Commenter.
+
+Faites varier le salaire $w$ ci-dessous, après avoir fait la question 5 à la main.
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+viewof w4 = Inputs.range([3, 9], {value: 6, step: 0.5, label: "salaire w"})
+```
+
+```{ojs}
+//| echo: false
+A4 = [[10 - w4 - 1, -1], [10 - w4, -w4]]
+B4 = [[w4 - 2, 0], [w4 - 2, w4]]
+brs4 = br2x2(A4, B4)
+g4 = gains2x2(A4, B4, brs4.ps, brs4.qs)
+
+{
+  const tab = toNode(matrixTable(A4, B4, ["K (contrôler)", "N (ne pas contrôler)"], ["T (travailler)", "F (tirer au flanc)"], {rowTitle: "Employeur", colTitle: "Salarié"}));
+  const plot = Plot.plot({
+    width: 520, height: 480, style: plotStyle,
+    marginLeft: 58, marginBottom: 52, marginTop: 20, marginRight: 24,
+    x: {domain: [-0.04, 1.04], label: "p : probabilité que l'employeur contrôle →", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
+    y: {domain: [-0.04, 1.04], label: "↑ q : probabilité que le salarié travaille", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
+    marks: [
+      Plot.line(brs4.rowPath, {x: "x", y: "y", z: "g", stroke: C.indigo, strokeWidth: 3.5}),
+      Plot.line(brs4.colPath, {x: "x", y: "y", z: "g", stroke: C.crimson, strokeWidth: 3.5}),
+      ...eqMarks(Plot, brs4.eq)
+    ]
+  });
+  const txt = html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
+    <span style="color:${C.indigo};font-weight:600">Bleu</span> : employeur.
+    <span style="color:${C.crimson};font-weight:600">Rouge</span> : salarié.
+    Équilibres purs trouvés : <b>${brs4.eq.filter(e => e.kind === "pur").length}</b>.
+    Équilibre mixte : <i>p</i>* = ${fr(brs4.ps)}, <i>q</i>* = ${fr(brs4.qs)}.
+    Gains espérés : employeur ${fr(g4.u1)}, salarié ${fr(g4.u2)}.</p>`;
+  return html`<div>${tab}${plot}${txt}</div>`;
+}
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Correction détaillée
+
+**Question 1. Matrice.** On calcule case par case, sans raccourci.
+
+- $(K,T)$ : employeur $10-6-1=3$ ; salarié $6-2=4$.
+- $(K,F)$ : pas de production, pas de salaire (contrôlé et pris), contrôle payé :
+  employeur $0-0-1=-1$ ; salarié $0-0=0$.
+- $(N,T)$ : employeur $10-6=4$ ; salarié $6-2=4$.
+- $(N,F)$ : pas de production, salaire payé quand même : employeur $-6$ ;
+  salarié $6$ (il n'a pas fourni d'effort).
+
+|  | $T$ | $F$ |
+|---|---|---|
+| $K$ | (3 ; 4) | (−1 ; 0) |
+| $N$ | (4 ; 4) | (−6 ; 6) |
+
+**Question 2. Pas d'équilibre pur.** On suit les meilleures réponses.
+
+- Face à $K$, le salarié joue $T$ ($4>0$). Face à $N$, il joue $F$ ($6>4$).
+- Face à $T$, l'employeur joue $N$ ($4>3$). Face à $F$, il joue $K$ ($-1>-6$).
+
+Partons de $(K,T)$ : l'employeur préfère passer à $N$ → $(N,T)$ : le salarié préfère
+$F$ → $(N,F)$ : l'employeur préfère $K$ → $(K,F)$ : le salarié préfère $T$ → retour
+à $(K,T)$. **Aucune case n'est stable**, le cycle ne s'arrête jamais. En soulignant
+les meilleures réponses, on obtient quatre soulignés répartis dans quatre cases
+différentes, jamais deux dans la même.
+
+**Question 3. Équilibre mixte.** $S_1=\{K,N\}$ et $S_2=\{T,F\}$. Posons
+$\sigma_1=(p,1-p)$ (employeur : $K$ avec probabilité $p$) et $\sigma_2=(q,1-q)$
+(salarié : $T$ avec probabilité $q$).
+
+*Le salarié doit être indifférent. Cela fixe $p$.*
+$$U_2(T,\sigma_1)=4p+4(1-p)=4,\qquad U_2(F,\sigma_1)=0\cdot p+6(1-p)=6-6p.$$
+Indifférence : $4=6-6p$, donc $p^*=\tfrac13$. Pour $p>\tfrac13$ le salarié
+travaille (car $6-6p<4$) ; pour $p<\tfrac13$ il tire au flanc.
+
+*L'employeur doit être indifférent. Cela fixe $q$.*
+$$U_1(K,\sigma_2)=3q+(-1)(1-q)=4q-1,\qquad U_1(N,\sigma_2)=4q+(-6)(1-q)=10q-6.$$
+Indifférence : $4q-1=10q-6$, donc $q^*=\tfrac56$. Pour $q<\tfrac56$ l'employeur
+contrôle (le salarié est trop souvent tire-au-flanc pour s'en passer) ; pour
+$q>\tfrac56$ il ne contrôle pas.
+
+**Équilibre mixte :** $(\sigma_1^*,\sigma_2^*)=\big((\tfrac13,\tfrac23),(\tfrac56,\tfrac16)\big)$.
+Sur la figure, la courbe bleue (employeur) a un segment horizontal à
+$q=\tfrac56$ et la courbe rouge (salarié) un segment vertical à $p=\tfrac13$.
+Elles se croisent en un seul point, à l'intérieur du carré, et nulle part sur le
+bord : c'est le signe graphique de l'absence d'équilibre pur.
+
+**Question 4. Gains espérés.** Salarié : indifférent, donc $U_2=U_2(T,\sigma_1)=4$.
+Employeur : $U_1=4q^*-1=\tfrac{10}3-1=\tfrac73\approx2{,}33$. Vérification par l'autre
+branche : $10q^*-6=\tfrac{25}3-\tfrac{18}3=\tfrac73$ ✓.
+
+**Question 5. Salaire $w=8$.** Nouvelle matrice : $(K,T)=(1\,;\,6)$, $(K,F)=(-1\,;\,0)$,
+$(N,T)=(2\,;\,6)$, $(N,F)=(-8\,;\,8)$. Même méthode.
+
+- Salarié indifférent : $6=8(1-p)$, donc $p^*=\tfrac14$.
+- Employeur indifférent : $2q-1=10q-8$, donc $q^*=\tfrac78$.
+- Gains : salarié $6$, employeur $2\cdot\tfrac78-1=\tfrac34$.
+
+**Lecture.** En général, avec effort $e$, coût de contrôle $c$ et salaire $w$,
+on obtient
+$$p^*=\frac ew,\qquad q^*=1-\frac cw.$$
+Trois enseignements.
+
+1. **$p^*$ ne dépend que des gains du salarié** ($e$ et $w$), pas de ceux de
+   l'employeur. C'est la phrase « chacun dose pour rendre l'*autre* indifférent ».
+   Si le contrôle devient moins cher ($c$ baisse), c'est $q^*$ qui monte : le
+   salarié travaille plus. Le contrôle, lui, ne bouge pas ($p^*=e/w$ ne contient
+   pas $c$).
+2. **Un salaire plus élevé réduit le contrôle** ($p^*$ passe de $\tfrac13$ à
+   $\tfrac14$) **et augmente l'effort** ($q^*$ passe de $\tfrac56$ à $\tfrac78$). Le
+   salarié a plus à perdre s'il est pris, donc l'employeur peut contrôler moins
+   sans que l'effort baisse. C'est l'idée du **salaire d'efficience**
+   (Shapiro et Stiglitz, 1984).
+3. **Mais l'employeur y perd** : $\tfrac73\to\tfrac34$. À l'équilibre mixte son
+   gain vaut $U_1=10\,q^*-w$. Le salaire monte de $2$ ; la production espérée
+   monte de $10\times(\tfrac78-\tfrac56)\approx0{,}42$. La discipline que le
+   salaire achète ne couvre pas son coût. Ce résultat ne se lit sur aucune
+   colonne de la matrice : il faut recalculer l'équilibre.
+:::
+
+## Vérifier votre propre exercice
+
+Entrez les gains d'un jeu $2\times2$ de votre fiche et comparez avec ce que vous
+avez trouvé à la main. **Ne l'utilisez pas à la place du calcul** : à l'examen,
+c'est la rédaction qui est notée.
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+viewof a00 = Inputs.number([-20, 20], {value: 3, step: 1, label: "Gain 1, ligne 1 / colonne 1"})
+viewof b00 = Inputs.number([-20, 20], {value: 1, step: 1, label: "Gain 2, ligne 1 / colonne 1"})
+viewof a01 = Inputs.number([-20, 20], {value: 0, step: 1, label: "Gain 1, ligne 1 / colonne 2"})
+viewof b01 = Inputs.number([-20, 20], {value: 2, step: 1, label: "Gain 2, ligne 1 / colonne 2"})
+viewof a10 = Inputs.number([-20, 20], {value: 1, step: 1, label: "Gain 1, ligne 2 / colonne 1"})
+viewof b10 = Inputs.number([-20, 20], {value: 0, step: 1, label: "Gain 2, ligne 2 / colonne 1"})
+viewof a11 = Inputs.number([-20, 20], {value: 2, step: 1, label: "Gain 1, ligne 2 / colonne 2"})
+viewof b11 = Inputs.number([-20, 20], {value: 3, step: 1, label: "Gain 2, ligne 2 / colonne 2"})
+```
+
+```{ojs}
+//| echo: false
+Af = [[a00, a01], [a10, a11]]
+Bf = [[b00, b01], [b10, b11]]
+brsF = br2x2(Af, Bf)
+
+{
+  const tab = toNode(matrixTable(Af, Bf, ["ligne 1", "ligne 2"], ["colonne 1", "colonne 2"], {underline: true, rowTitle: "Joueur 1", colTitle: "Joueur 2"}));
+  const plot = Plot.plot({
+    width: 520, height: 480, style: plotStyle,
+    marginLeft: 58, marginBottom: 52, marginTop: 20, marginRight: 24,
+    x: {domain: [-0.04, 1.04], label: "p : probabilité de la ligne 1 →", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
+    y: {domain: [-0.04, 1.04], label: "↑ q : probabilité de la colonne 1", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
+    marks: [
+      Plot.line(brsF.rowPath, {x: "x", y: "y", z: "g", stroke: C.indigo, strokeWidth: 3.5}),
+      Plot.line(brsF.colPath, {x: "x", y: "y", z: "g", stroke: C.crimson, strokeWidth: 3.5}),
+      ...eqMarks(Plot, brsF.eq)
+    ]
+  });
+  const mixte = brsF.eq.find(e => e.kind === "mixte");
+  const txt = html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
+    Équilibres en stratégies pures : <b>${brsF.eq.filter(e => e.kind === "pur").length}</b>.
+    ${mixte ? `Équilibre mixte : p* = ${fr(mixte.p, 3)}, q* = ${fr(mixte.q, 3)}.` : "Pas d'équilibre mixte à l'intérieur du carré."}
+    Cas dégénérés (égalités de gains) : le tracé n'est pas garanti.</p>`;
+  return html`<div>${tab}${plot}${txt}</div>`;
+}
+```
+
+:::
+
+## Ce qu'il faut savoir refaire seul
+
+1. Dire, pour un jeu donné, si l'EISSD s'applique, et l'appliquer en citant à
+   chaque tour **qui** domine **qui** et **contre quoi**.
+2. Souligner les meilleures réponses sans rien oublier : colonne par colonne pour le
+   joueur ligne, ligne par ligne pour le joueur colonne.
+3. Pour un équilibre mixte, écrire explicitement $\sigma_1=(p,1-p)$ et
+   $\sigma_2=(q,1-q)$, puis **l'indifférence de l'autre joueur**.
+4. Donner l'équilibre comme un **profil complet** : $(\sigma_1^*,\sigma_2^*)$, pas
+   « $p=1/3$ ».
+5. Interpréter : multiplicité, comparaison de Pareto, qui gagne et qui perd quand un
+   paramètre change.
+
+## Repères
+
+- Cournot, A. (1838), *Recherches sur les principes mathématiques de la théorie des
+  richesses*.
+- von Neumann, J. (1928), « Zur Theorie der Gesellschaftsspiele », *Mathematische
+  Annalen* 100.
+- Nash, J. (1950), « Equilibrium Points in n-Person Games », *PNAS* 36(1).
+- Nash, J. (1951), « Non-Cooperative Games », *Annals of Mathematics* 54(2).
+- Schelling, T. (1960), *The Strategy of Conflict*, Harvard University Press.
+- Shapiro, C. et Stiglitz, J. (1984), « Equilibrium Unemployment as a Worker
+  Discipline Device », *American Economic Review* 74(3).
