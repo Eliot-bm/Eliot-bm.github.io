@@ -1,0 +1,243 @@
+---
+title: "Stratégies mixtes : deux laboratoires"
+subtitle: "Voir l'indifférence, puis voir ce qu'un test ne sépare pas"
+description: "Deux manipulations : une matrice augmentée où l'on cherche soi-même le mélange qui rend l'adversaire indifférent, et une simulation où l'on compte combien de jeux-points « contredisent » l'équilibre par pur hasard."
+date: 2026-10-29
+categories: [théorie des jeux, stratégies mixtes, L3]
+---
+
+Cette page est un **brouillon pilote** : deux manipulations, sans la leçon qui
+les entoure. Elle ne remplace ni le cours ni la page
+[S, s, σ, p : qui est qui ?](notation.qmd).
+
+Dans les deux cas, **faites votre pronostic avant de bouger un curseur**.
+Deviner puis constater retient mieux que constater seulement.
+
+```{ojs}
+//| echo: false
+import {C, plotStyle, fr, toNode, augmenteTable, indifference, melangeEquilibre, rejetsParTirage, tireJeux, alea, EPS_EGAL} from "./gt.js"
+```
+
+## 1. Chercher le mélange qui rend l'autre indifférent
+
+L'idée de cette manipulation vient d'un article d'enseignement (Garrett et Moore,
+*International Review of Economics Education*, pp. 82-84) : au lieu de résoudre
+l'équilibre mixte par l'algèbre, on **ajoute au tableau une ligne et une colonne
+« mélange »**. Ces deux cases supplémentaires montrent ce que rapporterait un
+mélange choisi, et l'on voit à l'œil quand l'adversaire devient indifférent.
+
+Le jeu : le joueur 1 choisit $U$ ou $D$ ; le joueur 2 choisit $L$ ou $R$. Gains
+(joueur 1 ; joueur 2).
+
+|  | $L$ | $R$ |
+|---|---|---|
+| $U$ | (4 ; 2) | (0 ; 5) |
+| $D$ | (2 ; 4) | (3 ; 0) |
+
+Aucune case n'est stable : chaque joueur veut dévier de chacune. Ce jeu n'a donc
+pas d'équilibre en stratégies pures. Il y a un équilibre en stratégies mixtes : on
+le cherche.
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+A = [[4, 0], [2, 3]]
+B = [[2, 5], [4, 0]]
+eq = melangeEquilibre(A, B)
+viewof pred = Inputs.radio(["moins de 1/2", "exactement 1/2", "plus de 1/2"], {label: "Pronostic : à l'équilibre, le joueur 1 joue U avec une probabilité…"})
+```
+
+```{ojs}
+//| echo: false
+viewof pU = Inputs.range([0, 1], {value: 0.5, step: 0.01, label: "p (joueur 1 joue U)"})
+viewof qL = Inputs.range([0, 1], {value: 0.5, step: 0.01, label: "q (joueur 2 joue L)"})
+```
+
+```{ojs}
+//| echo: false
+{
+  const tab = toNode(augmenteTable(A, B, ["U", "D"], ["L", "R"], pU, qL));
+  const ind = indifference(A, B, pU, qL);
+  const style = "font-family:Jost;font-size:.9rem;max-width:34rem;margin:.25rem 0";
+  const msg = html`<div>
+    <p style="${style}"><span style="color:${C.crimson};font-weight:600">Joueur 2</span>,
+      face à votre mélange (p = ${fr(pU)}) : L rapporte <b>${fr(ind.joueur2.pure1)}</b>,
+      R rapporte <b>${fr(ind.joueur2.pure2)}</b>. Écart : ${fr(ind.joueur2.ecart)}.</p>
+    <p style="${style}"><span style="color:${C.indigo};font-weight:600">Joueur 1</span>,
+      face à votre mélange (q = ${fr(qL)}) : U rapporte <b>${fr(ind.joueur1.pure1)}</b>,
+      D rapporte <b>${fr(ind.joueur1.pure2)}</b>. Écart : ${fr(ind.joueur1.ecart)}.</p>
+    <p style="${style};color:${C.umber}">Souligné : meilleure réponse (bleu : joueur 1,
+      rouge : joueur 2). Deux gains à moins de ${fr(EPS_EGAL)} sont lus égaux, car un curseur
+      au pas de 0,01 ne peut pas viser un mélange exact. Case dorée : le mélange
+      de chaque joueur est une meilleure réponse à celui de l'autre.</p>
+  </div>`;
+  return html`<div>${tab}${msg}</div>`;
+}
+```
+
+```{ojs}
+//| echo: false
+viewof reveal = Inputs.toggle({label: "révéler l'équilibre", value: false})
+```
+
+```{ojs}
+//| echo: false
+{
+  if (!reveal) return html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">Cherchez d'abord : faites tendre les deux écarts vers 0.</p>`;
+  const cat = eq.p < 0.5 - 1e-9 ? "moins de 1/2" : Math.abs(eq.p - 0.5) < 1e-9 ? "exactement 1/2" : "plus de 1/2";
+  const verdict = pred == null ? "Vous n'avez pas fait de pronostic."
+    : pred === cat ? "Votre pronostic était juste." : `Votre pronostic (« ${pred} ») était faux.`;
+  return html`<div style="font-family:Jost;font-size:.9rem;max-width:34rem">
+    <p><b>${verdict}</b> L'équilibre est (p* ; q*) = (4/7 ; 3/5), soit
+      (${fr(eq.p, 3)} ; ${fr(eq.q, 3)}). Gains espérés à l'équilibre : ${fr(2.4)} pour le joueur 1,
+      ${fr(20 / 7, 3)} pour le joueur 2.</p>
+  </div>`;
+}
+```
+
+:::
+
+::: {.callout-note}
+## À regarder
+
+- **Trouvez $p$ en regardant le joueur 2, pas le joueur 1.** C'est l'écart du
+  joueur 2 qui dépend de $p$. Le mélange du joueur 1 est choisi pour rendre le
+  joueur 2 indifférent : c'est la phrase du cours, ici sous vos yeux.
+- À $p=q=0{,}5$, le mélange du joueur 1 est-il une meilleure réponse ? Regardez
+  quelles cases sont soulignées dans la ligne « mélange ».
+- Quand le joueur 2 est indifférent, la ligne « mélange » du tableau a deux gains du
+  joueur 2 **identiques** : c'est ce qui se lit dans la ligne, sans calcul.
+:::
+
+## 2. Combien de jeux « contredisent » l'équilibre par hasard ?
+
+Walker et Wooders (*American Economic Review*, 2001, pp. 1521-1527) testent si des
+joueurs de tennis mélangent comme la théorie le prédit. Chaque point est un petit jeu
+2×2 : le serveur sert à gauche ou à droite, le receveur devine. **Si le serveur
+mélange à l'équilibre, il doit gagner autant de points en servant à gauche qu'en
+servant à droite** : c'est l'indifférence, observable dans les données. Leur
+test compare ces deux taux de réussite jeu par jeu (40 jeux-points au total,
+test du chi-deux de Pearson) et trouve **un rejet sur 40 au seuil de 5 %**, alors que
+la théorie en prévoit environ deux même si elle est vraie.
+
+Cette phrase contient l'idée centrale. Un test au seuil de 5 % **rejette à tort**
+une fois sur vingt quand l'hypothèse est vraie. Sur 40 jeux, quelques rejets sont donc
+attendus **par hasard**. Ci-dessous, le serveur joue exactement l'équilibre : la
+théorie est vraie par construction. Combien de rejets voit-on ?
+
+::: {.td-app}
+
+```{ojs}
+//| echo: false
+viewof n = Inputs.range([20, 400], {value: 80, step: 10, label: "services par jeu-point"})
+viewof ecart = Inputs.range([0, 20], {value: 0, step: 1, label: "écart réel entre les deux taux (points de %)"})
+viewof alpha = Inputs.radio(new Map([["5 %", 0.05], ["10 %", 0.10]]), {value: 0.05, label: "seuil du test"})
+viewof tirage = Inputs.button("Tirer 40 nouveaux jeux-points", {value: 0, reduce: v => v + 1})
+```
+
+```{ojs}
+//| echo: false
+// Taux de base 65 % : valeur arbitraire, sans effet sur la logique. Le serveur
+// sert à gauche une fois sur deux. L'écart réel ouvre la différence entre
+// les deux taux de réussite : 0 = équilibre vrai.
+base = 0.65
+piG = base + ecart / 200
+piD = base - ecart / 200
+
+pvals = tireJeux(alea(1000 + tirage), 40, n, 0.5, piG, piD)
+rejets = pvals.filter(v => v < alpha).length
+
+Plot.plot({
+  width: 600, height: 280, style: plotStyle,
+  marginLeft: 56, marginBottom: 46,
+  x: {label: "les 40 jeux-points, classés par p-value →", ticks: []},
+  y: {domain: [0, 1], label: "↑ p-value du test d'égalité des taux"},
+  marks: [
+    Plot.ruleY([alpha], {stroke: C.crimson, strokeDasharray: "5,3"}),
+    Plot.text([[1, alpha]], {text: [`seuil ${fr(alpha * 100, 0)} %`], textAnchor: "start", dy: -8, fill: C.crimson}),
+    Plot.dot(pvals.slice().sort((a, b) => a - b).map((v, i) => ({i, v})),
+             {x: "i", y: "v", fill: d => d.v < alpha ? C.crimson : C.indigo, r: 4.5, stroke: "white"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<p style="font-family:Jost;font-size:.95rem;max-width:34rem">
+  <b style="color:${C.crimson}">${rejets} rejet${rejets > 1 ? "s" : ""}</b> sur 40 au seuil de ${fr(alpha * 100, 0)} %.
+  Si l'équilibre est vrai, on en attend en moyenne 40 × ${fr(alpha)} = <b>${fr(40 * alpha, 1)}</b>.</p>`
+```
+
+Un seul tirage ne dit presque rien. Voici ce que donnent **500 tirages** de 40 jeux :
+en gris, quand l'équilibre est vrai (écart nul) ; en rouge, avec l'écart que vous avez
+choisi.
+
+```{ojs}
+//| echo: false
+repNul = rejetsParTirage(11, 500, 40, n, 0.5, base, base, alpha)
+repAlt = rejetsParTirage(12, 500, 40, n, 0.5, piG, piD, alpha)
+moy = d => d.reduce((s, x) => s + x.k * x.part, 0)
+recouvrement = repNul.reduce((s, x, i) => s + Math.min(x.part, repAlt[i].part), 0)
+
+{
+  const kmax = Math.max(12, ...repNul.concat(repAlt).filter(x => x.part > 0.001).map(x => x.k)) + 1;
+  const garde = d => d.filter(x => x.k <= kmax);
+  const plot = Plot.plot({
+    width: 600, height: 300, style: plotStyle,
+    marginLeft: 56, marginBottom: 46,
+    x: {label: "nombre de rejets sur 40 jeux-points →", tickFormat: "d", domain: d3.range(0, kmax + 1)},
+    y: {label: "↑ part des 500 tirages", tickFormat: ".0%"},
+    marks: [
+      Plot.barY(garde(repNul), {x: "k", y: "part", fill: "#8a8a8a", fillOpacity: .6}),
+      ecart > 0 ? Plot.barY(garde(repAlt), {x: "k", y: "part", fill: C.crimson, fillOpacity: .5}) : null,
+      Plot.ruleY([0])
+    ]
+  });
+  const txt = html`<p style="font-family:Jost;font-size:.95rem;max-width:34rem">
+    Moyenne des rejets, équilibre vrai : <b>${fr(moy(repNul), 2)}</b>.
+    ${ecart > 0 ? html` Avec un écart réel de ${ecart} point${ecart > 1 ? "s" : ""} de % : <b>${fr(moy(repAlt), 2)}</b>.
+    <br>Recouvrement des deux distributions : <b>${fr(recouvrement * 100, 0)} %</b>
+    (100 % = on ne peut pas les distinguer).` : ""}</p>`;
+  return html`<div>${plot}${txt}</div>`;
+}
+```
+
+:::
+
+::: {.callout-note}
+## Questions, dans l'ordre
+
+1. **Avant de bouger quoi que ce soit**, pronostiquez : l'équilibre est vrai
+   (écart 0), 80 services par jeu-point. Combien de rejets sur 40 au seuil de 5 % ?
+   Tirez plusieurs fois. Votre pronostic était-il bon ?
+2. **Pronostiquez** : avec un écart réel de 10 points de %, le nombre de rejets
+   passe de 2 à environ combien ? Vérifiez.
+3. Remettez l'écart à 5 points et réduisez les services à 30 par jeu-point. Regardez
+   le recouvrement. Que **ne sépare pas** ce test dans ces conditions ?
+4. Walker et Wooders ont choisi des matchs longs « pour que les tests aient une
+   puissance suffisante » (p. 1525). Qu'est-ce que cela change à ce que veut
+   dire « aucun rejet » ?
+:::
+
+**Ce qu'il faut retenir de la seconde partie.** « Peu de rejets » est compatible
+avec deux choses : l'équilibre est vrai, **ou** le test n'a pas la puissance de voir
+l'écart. Quand le recouvrement est élevé, les deux ne se distinguent pas. La
+phrase « le test ne rejette pas » ne démontre donc pas que les joueurs mélangent.
+Elle dit seulement ce que ce test, sur ces effectifs, ne peut pas voir.
+
+Walker et Wooders trouvent par ailleurs que **les choix ne sont pas indépendants
+dans le temps** : même les meilleurs joueurs changent trop souvent de côté
+(p. 1521). Deux implications de la même théorie, deux verdicts différents.
+
+[À toi : le problème ouvert qui prolonge cette page. Les joueurs de tennis
+mélangent-ils ? Quelles données demanderais-tu, et que conclurais-tu de chaque
+résultat possible ?]
+
+## Repères
+
+- Garrett, K. et Moore, E., « Teaching Mixed Strategy Nash Equilibrium to
+  Undergraduates », *International Review of Economics Education*, pp. 79-87
+  (numéro et année à confirmer).
+- Walker, M. et Wooders, J. (2001), « Minimax Play at Wimbledon », *American
+  Economic Review* 91(5).

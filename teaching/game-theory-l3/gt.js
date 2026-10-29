@@ -18,7 +18,11 @@ export function toNode(s) {
 
 const num = (x) => String(x).replace("-", "−");
 // Decimales a la francaise : 0,40 et non 0.40.
-export const fr = (x, d = 2) => x.toFixed(d).replace(".", ",");
+export const fr = (x, d = 2) => {
+  let s = x.toFixed(d);
+  if (Number(s) === 0) s = (0).toFixed(d);   // pas de « -0,00 »
+  return s.replace(".", ",").replace("-", "−");
+};
 
 // ---------------------------------------------------------------------------
 // Jeux sous forme strategique. A[i][j] = gain du joueur ligne, B[i][j] = gain
@@ -326,4 +330,129 @@ export function treeStepText(tree, step) {
   };
   go(t);
   return lines.length ? lines.join(" ") : "Aucun nœud à cette hauteur.";
+}
+
+// ---------------------------------------------------------------------------
+// Matrice augmentee (idee didactique de Garrett et Moore, IREE, p.82-84) :
+// on ajoute au 2x2 une ligne et une colonne « melange » avec les gains espérés.
+//   p = proba de la 1re ligne (joueur 1), q = proba de la 1re colonne (joueur 2).
+// ---------------------------------------------------------------------------
+
+// Tolerance d'affichage : deux gains espérés a moins de 0,02 sont lus « egaux »
+// pour souligner. Un curseur au pas de 0,01 ne peut pas viser exactement 4/7 :
+// a p = 0,57 l'ecart d'indifference vaut deja 0,01. La page l'annonce a l'etudiant.
+export const EPS_EGAL = 0.02;
+
+function gainAug(A, B, wi, wj) {
+  let a = 0, b = 0;
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
+    a += wi[r] * wj[c] * A[r][c];
+    b += wi[r] * wj[c] * B[r][c];
+  }
+  return [a, b];
+}
+
+// Les 3x3 gains : lignes [pure 1, pure 2, melange], colonnes idem.
+export function augmente(A, B, p, q) {
+  const W = (x) => [[1, 0], [0, 1], [x, 1 - x]];
+  const wr = W(p), wc = W(q);
+  return [0, 1, 2].map(i => [0, 1, 2].map(j => gainAug(A, B, wr[i], wc[j])));
+}
+
+// Ecarts d'indifference : gain de la 1re minus gain de la 2e strategie pure.
+export function indifference(A, B, p, q) {
+  const G = augmente(A, B, p, q);
+  return {
+    joueur1: {pure1: G[0][2][0], pure2: G[1][2][0], ecart: G[0][2][0] - G[1][2][0]},
+    joueur2: {pure1: G[2][0][1], pure2: G[2][1][1], ecart: G[2][0][1] - G[2][1][1]}
+  };
+}
+
+// Equilibre mixte d'un 2x2 sans equilibre pur : poids qui rendent l'AUTRE indifferent.
+export function melangeEquilibre(A, B) {
+  const a0 = A[0][0] - A[1][0], a1 = A[0][1] - A[1][1];
+  const b0 = B[0][0] - B[0][1], b1 = B[1][0] - B[1][1];
+  return {q: -a1 / (a0 - a1), p: -b1 / (b0 - b1)};
+}
+
+const f2 = (x) => String(Math.round(x * 100) / 100).replace(".", ",").replace("-", "−");
+
+export function augmenteTable(A, B, rowNames, colNames, p, q, {underline = true} = {}) {
+  const G = augmente(A, B, p, q);
+  const rn = [...rowNames, `mélange (${f2(p)} ; ${f2(1 - p)})`];
+  const cn = [...colNames, `mélange (${f2(q)} ; ${f2(1 - q)})`];
+  const maxCol = j => Math.max(...[0, 1, 2].map(i => G[i][j][0]));
+  const maxRow = i => Math.max(...[0, 1, 2].map(j => G[i][j][1]));
+  const cell = (i, j) => {
+    const [a, b] = G[i][j];
+    const ur = underline && a >= maxCol(j) - EPS_EGAL, uc = underline && b >= maxRow(i) - EPS_EGAL;
+    const A_ = ur ? `<span style="border-bottom:2px solid ${C.indigo}">${f2(a)}</span>` : f2(a);
+    const B_ = uc ? `<span style="border-bottom:2px solid ${C.crimson}">${f2(b)}</span>` : f2(b);
+    const mix = (i === 2 || j === 2) ? `background:${C.cream};` : "";
+    const gold = ur && uc && i === 2 && j === 2 ? `background:${C.gold}88;` : "";
+    return `<td style="border:1px solid ${C.ink}33;padding:.4rem .7rem;text-align:center;white-space:nowrap;${mix}${gold}">(${A_}&nbsp;;&nbsp;${B_})</td>`;
+  };
+  const head = cn.map((n, j) => `<th style="padding:.3rem .7rem;text-align:center;font-weight:${j === 2 ? 400 : 600}">${n}</th>`).join("");
+  const body = rn.map((n, i) => `<tr><th style="padding:.3rem .7rem;text-align:right;font-weight:${i === 2 ? 400 : 600}">${n}</th>${[0, 1, 2].map(j => cell(i, j)).join("")}</tr>`).join("");
+  return `<table style="font-family:Jost,sans-serif;font-size:.92rem;border-collapse:collapse;margin:.4rem 0">
+    <tr><th></th><th colspan="3" style="text-align:center;color:${C.crimson};font-weight:500">Joueur 2</th></tr>
+    <tr><th style="color:${C.indigo};font-weight:500;text-align:right">Joueur 1</th>${head}</tr>${body}</table>`;
+}
+
+// ---------------------------------------------------------------------------
+// Simulation du test d'egalite des taux de reussite (Walker et Wooders 2001,
+// p.1524-1527) : un jeu-point = n premiers services ; le serveur sert a gauche
+// avec proba theta ; il gagne le point avec proba piG (gauche) et piD (droite).
+// Test du chi-deux de Pearson 2x2 (1 ddl) : egalite des deux taux.
+// ---------------------------------------------------------------------------
+
+// Generateur pseudo-aleatoire a graine (mulberry32) : tirages reproductibles.
+export function alea(graine) {
+  let t = graine >>> 0;
+  return () => {
+    t += 0x6D2B79F5;
+    let x = Math.imul(t ^ (t >>> 15), 1 | t);
+    x ^= x + Math.imul(x ^ (x >>> 7), 61 | x);
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function binom(rng, n, p) { let k = 0; for (let i = 0; i < n; i++) if (rng() < p) k++; return k; }
+
+// erfc : approximation d'Abramowitz et Stegun 7.1.26 (erreur < 1,5e-7).
+function erfc(x) {
+  const s = x < 0 ? -1 : 1, z = Math.abs(x), t = 1 / (1 + 0.3275911 * z);
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z);
+  return s > 0 ? 1 - y : 1 + y;
+}
+
+// p-value du chi-deux 2x2 : gagnes/total a gauche, gagnes/total a droite.
+export function chi2Egalite(wG, nG, wD, nD) {
+  const N = nG + nD, W = wG + wD, L = N - W;
+  if (nG === 0 || nD === 0 || W === 0 || L === 0) return 1;
+  const att = [[nG * W / N, nG * L / N], [nD * W / N, nD * L / N]];
+  const obs = [[wG, nG - wG], [wD, nD - wD]];
+  let Q = 0;
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) Q += (obs[i][j] - att[i][j]) ** 2 / att[i][j];
+  return erfc(Math.sqrt(Q / 2));   // P(chi2_1 > Q) = erfc(sqrt(Q/2))
+}
+
+// Tire `jeux` jeux-points independants et renvoie leurs p-values.
+export function tireJeux(rng, jeux, n, theta, piG, piD) {
+  const out = [];
+  for (let g = 0; g < jeux; g++) {
+    const nG = binom(rng, n, theta), nD = n - nG;
+    out.push(chi2Egalite(binom(rng, nG, piG), nG, binom(rng, nD, piD), nD));
+  }
+  return out;
+}
+
+// Repartition du nombre de rejets au seuil alpha sur `reps` repetitions de `jeux` jeux-points.
+export function rejetsParTirage(graine, reps, jeux, n, theta, piG, piD, alpha) {
+  const rng = alea(graine), compte = new Array(jeux + 1).fill(0);
+  for (let r = 0; r < reps; r++) {
+    const k = tireJeux(rng, jeux, n, theta, piG, piD).filter(v => v < alpha).length;
+    compte[k]++;
+  }
+  return compte.map((c, k) => ({k, part: c / reps}));
 }
