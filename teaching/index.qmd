@@ -1,7 +1,10 @@
 ---
-title: "Teaching"
+title: "Enseignement"
 listing:
-  contents: "*.qmd"
+  # "*/index.qmd" ramasse les cours, qui ont chacun leur propre dossier.
+  # Les pages internes d'un cours ne remontent pas ici : on n'y entre que par
+  # la page du cours.
+  contents: ["*/index.qmd"]
   type: grid
   grid-columns: 2
   sort: "date desc"
@@ -12,6 +15,8 @@ listing:
 page-layout: full
 ---
 
-Course pages gather the slides, the problem sets, and the video lectures in one
-place. Videos are hosted on YouTube; the slides are built in Quarto and open in
-the browser.
+Deux cours cette année. Chaque page rassemble la plaquette de travaux dirigés et
+les compagnons interactifs des séances : les modèles y sont manipulables, et
+chaque hypothèse peut être retirée pour voir ce qu'elle tenait.
+
+Aucune correction n'est publiée.

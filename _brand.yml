@@ -1,35 +1,61 @@
 # _brand.yml
-# Identite visuelle unique. Quarto lit ce fichier automatiquement et l'applique
-# au site, aux slides revealjs et aux PDF. Une seule source de verite.
-# Reference : les data portraits realises par W.E.B. Du Bois ET son equipe
+# SOURCE UNIQUE des couleurs du site. Quarto en tire des variables CSS
+# (--brand-crimson, --brand-indigo, ...) que styles.scss et, a terme, les widgets
+# lisent. Ne plus recopier un hexadecimal ailleurs : ajouter la couleur ici.
+# Reference visuelle : les data portraits de W.E.B. Du Bois ET de son equipe
 # d'etudiants et d'anciens eleves de l'universite d'Atlanta (Paris, 1900).
 #
-# DEUX REGISTRES, decision assumee :
-#   - INTERFACE (ce fichier) : palette adoucie. Un site se lit vingt minutes ;
-#     le #FFD700 et le #00AA00 authentiques sont illisibles en aplats larges.
-#   - FIGURES (R/theme_dubois.R) : palette authentique saturee. Une figure
-#     frappe en trois secondes, elle peut se permettre l'audace d'origine.
+# IDENTITE : papier ivoire, aplats satures sans contour, peu d'elements, filets
+# fins (voir styles.scss et R/decor/make_motifs.R).
+#
+# ROLES des couleurs :
+#   paper       : fond de toutes les pages.
+#   ink         : texte, filets.
+#   crimson-ink : liens (le seul crimson qui passe AA sur le papier).
+#   crimson     : aplats de figure, filet de navigation, joueur 2 des widgets.
+#   indigo      : aplats de figure, joueur 1 des widgets.
+#   gold, olive, umber : aplats de figure, jamais du texte courant.
+#   cream       : fond des figures et widgets (un cran plus clair que le papier).
+#   plate-*     : palette officielle du guide Du Boisian (A. Starks), figures seulement.
+# Contrastes sur le papier (WCAG AA = 4,5:1 pour le texte) : ink 15,3 ; indigo 7,7 ;
+# mute 7,7 ; crimson-ink 6,7 ; olive-ink 6,0 ; crimson 4,38 et plate-blue 3,6 (aplats
+# seulement) ; gold < 2 : aplats seulement, jamais du texte.
 
 meta:
   name: Eliot Bochet-Merand
 
 color:
-  # -- Palette nommee : les 5 accents Du Bois + encre + fond ---------------
   palette:
-    # Versions desaturees, pour l'interface uniquement.
-    # (Valeur authentique en commentaire, a titre de trace.)
-    crimson: "#C8102E"   # authentique #DC143C -- liens, elements actifs
-    gold:    "#E8A33D"   # authentique #FFD700
-    indigo:  "#1E4C7C"   # authentique #4682B4
-    olive:   "#5C7A47"   # authentique #00AA00
-    umber:   "#7B4B28"   # authentique #654321
+    crimson: "#DC143C"
+    gold:    "#FFD700"
+    indigo:  "#1E4C7C"
+    olive:   "#5C7A47"
+    umber:   "#654321"
     ink:     "#1A1A1A"
+    cream:   "#FBF8F3"
+    # Papier de la page : le fond du guide de style Du Boisian (mesure).
+    paper:   "#F6EFE7"
+    # Crimson des liens et du texte : le crimson de donnee ne fait que 4,38:1
+    # sur le papier, sous AA. Il reste utilise pour les aplats et le joueur 2.
+    crimson-ink: "#A80D26"
+    # Variantes de TEXTE pour les widgets (gt.js) : l'olive d'aplat et
+    # le gris des etiquettes ne passent pas AA sur le papier.
+    olive-ink: "#47623A"
+    mute: "#524A3E"
+    # Planches authentiques de 1900 (figures uniquement).
+    plate-black:   "#000000"
+    plate-tan:     "#D2B48C"
+    plate-crimson: "#DC143C"
+    plate-gold:    "#FFD700"
+    plate-blue:    "#4682B4"
+    plate-green:   "#00AA00"
+    plate-brown:   "#654321"
+    plate-pink:    "#FFC0CB"
+    # Feuille dechiree sous les disques : teinte des scans des planches (mesuree).
+    plate-sheet:   "#EADBC8"
 
-  # -- Roles semantiques : ce que Quarto applique reellement ---------------
-  # Note : background reste blanc. Le creme n'arrive que dans les callouts
-  # et les figures, sinon le site glisse vers le pastiche vintage.
   foreground: ink
-  background: white   # jamais de creme sur toute une page
+  background: paper   # le papier des planches : sans lui, aucune ressemblance
   primary: crimson
   secondary: indigo
   info: indigo
@@ -37,7 +63,6 @@ color:
   success: olive
 
 typography:
-  # Polices chargees depuis Google Fonts, rien a installer.
   fonts:
     - family: Jost
       source: google
@@ -47,7 +72,10 @@ typography:
       weight: [400, 600]
 
   base:
-    family: Source Serif 4
+    # Guillemets internes indispensables : sans eux, "Source Serif 4" est un
+    # identifiant CSS invalide (il finit par un chiffre) et le navigateur
+    # retombe sur Times New Roman.
+    family: "'Source Serif 4', Georgia, serif"
     size: 17px
     line-height: 1.7
 
@@ -56,5 +84,5 @@ typography:
     weight: 500
 
   link:
-    color: crimson
+    color: crimson-ink
     decoration: underline

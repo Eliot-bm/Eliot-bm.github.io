@@ -1,67 +1,62 @@
 /*-- scss:defaults --*/
 
-// Rappel des couleurs cote SCSS (Quarto les expose depuis _brand.yml,
-// on les redeclare pour pouvoir s'en servir dans les regles ci-dessous).
-// INTERFACE : versions adoucies (chrome du site, liens, filets)
-$dubois-crimson: #C8102E;
-$dubois-gold:    #E8A33D;
-$dubois-indigo:  #1E4C7C;
-$dubois-olive:   #5C7A47;
-$dubois-umber:   #7B4B28;
-$dubois-ink:     #1A1A1A;
-
-// FIGURES : valeurs authentiques documentees (planches de 1900)
-$plate-tan:      #D2B48C;   // le fond reel des planches
-$plate-crimson:  #DC143C;
-$plate-gold:     #FFD700;
-$plate-blue:     #4682B4;
-$plate-green:    #00AA00;
-$plate-brown:    #654321;
+// Aucune couleur de marque ici : elles vivent dans _brand.yml et arrivent
+// en variables CSS (--brand-paper, --brand-ink, ...). Le fond de la barre de
+// navigation est force plus bas, dans les regles.
+$navbar-fg: #1A1A1A;
+$navbar-hl: #1A1A1A;
 
 /*-- scss:rules --*/
 
-// --- Titres : capitales espacees, facon planche dessinee a la main -------
-// Le seul geste vraiment "Du Bois" de la typo. Reserve aux h1/h2 pour
-// que l'effet reste un accent et non un tic.
-h1, h2 {
-  letter-spacing: 0.055em;
-  text-transform: none;
+// --- Barre de navigation : papier, filet fin ------------------------------
+.navbar {
+  background-color: var(--brand-paper) !important;
+  border-bottom: 1px solid var(--brand-ink);
+  font-family: Jost, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
 }
+.navbar .nav-link.active,
+.navbar .nav-link:hover { color: var(--brand-crimson-ink); }
+.navbar .navbar-brand { letter-spacing: 0.1em; }
 
-// --- Filet crimson sous les titres de section ---------------------------
-// Structure porteuse de sens : marque la coupure, ne decore pas.
+// --- Titres : capitales espacees, comme le lettrage des planches ----------
+h1, h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
 h2 {
-  border-bottom: 2px solid $dubois-crimson;
+  border-bottom: 1px solid var(--brand-ink);
   padding-bottom: 0.3rem;
   margin-top: 2.5rem;
 }
 
-// --- La planche : SEUL endroit ou la palette authentique apparait -------
-// Zone "figure", donc registre sature : fond tan reel des planches de 1900.
+// --- La planche : palette authentique, fond tan ---------------------------
 // Usage dans un .qmd : ::: {.data-plate} ... :::
 .data-plate {
-  background-color: $plate-tan;
+  background-color: var(--brand-plate-tan);
+  border: 1px solid var(--brand-ink);
   padding: 1.5rem;
   margin: 2rem 0;
-  border-radius: 0;   // angles vifs : c'est une planche, pas une carte
+  border-radius: 0;
 
   figcaption, .caption {
     font-family: Jost, sans-serif;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-size: 0.75rem;
-    color: $plate-brown;
+    color: var(--brand-ink);
   }
 }
 
-// --- Liens : souligne discret, crimson au survol ------------------------
+// --- Liens ---------------------------------------------------------------
 a {
   text-underline-offset: 0.15em;
   text-decoration-thickness: 1px;
 }
 
 // --- Listings (Research / Teaching / Notes) -----------------------------
-// Titres des entrees en Jost pour distinguer la liste du corps de texte.
 .quarto-listing .listing-title {
   font-family: Jost, sans-serif;
   font-weight: 500;
@@ -72,28 +67,101 @@ a {
   font-family: Jost, sans-serif;
   font-size: 0.8rem;
   letter-spacing: 0.04em;
+  color: var(--brand-ink);
 }
 
-// --- Badges de categorie : les 5 couleurs, pas du gris ------------------
+// Colonne des categories : le gris Bootstrap ne passe pas AA sur le papier.
+.quarto-listing-category .category,
+.quarto-listing-category .category.active,
+div.quarto-post .listing-categories .listing-category,
+.quarto-grid-item .listing-categories .listing-category { color: var(--brand-ink); }
+
+// --- Badges de categorie : encadres d'encre ------------------------------
 .quarto-category {
   background-color: transparent;
-  border: 1px solid $dubois-indigo;
-  color: $dubois-indigo;
+  border: 1px solid var(--brand-ink);
+  color: var(--brand-ink);
   border-radius: 0;
   padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
 }
+.quarto-title .quarto-categories .quarto-category { font-size: 0.75rem; }
 
 // --- Bloc "News" de la home --------------------------------------------
 .news-item {
-  border-left: 2px solid $dubois-gold;
+  border-left: 4px solid var(--brand-gold);
   padding-left: 0.9rem;
   margin-bottom: 0.8rem;
 }
 
+// --- Pied de page : encre, filet plein -----------------------------------
+.nav-footer {
+  border-top: 1px solid var(--brand-ink);
+  color: var(--brand-ink);
+  a { color: var(--brand-crimson-ink); }
+}
+
+// --- Applications interactives des pages de TD --------------------------
+// La colonne de texte est bornee a 34rem (voir plus bas) : ce conteneur
+// deborde volontairement pour qu'un diagramme reste lisible.
+.td-app {
+  max-width: 46rem;
+  margin: 1.5rem 0 2.5rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--brand-ink);
+
+  svg, figure { max-width: 100%; height: auto; }
+  figure { outline: 1px solid var(--brand-ink); }
+
+  form {
+    font-family: Jost, sans-serif;
+    font-size: 0.85rem;
+    margin-bottom: 0.35rem;
+  }
+}
+
 // --- Lisibilite : largeur de ligne bornee sur les textes longs ----------
-// 70 caracteres environ. Non negociable pour un abstract ou un essai.
 main {
   p, ul, ol {
     max-width: 34rem;
   }
+}
+
+// --- Figures decoratives : une forme par page ------------------------------
+// Images generees par R/decor/make_motifs.R, sans axe ni legende. Usage dans un
+// .qmd : ![](...){.plate alt=""} apres le texte. Sur une page a liste, ajouter
+// ::: {.plate-row} autour du texte et de l'image : la figure se place a droite,
+// assez petite pour ne pas repousser la liste. La colonne de l'accueil (environ
+// 480 px) est trop etroite pour ca.
+.plate-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 3rem;
+
+  > :first-child { flex: 1 1 auto; min-width: 0; }
+  > p:last-child { flex: 0 0 auto; max-width: none; margin: 0; }
+
+  img.plate { width: clamp(12rem, 18vw, 15rem); margin: 0; }
+}
+img.plate {
+  display: block;
+  width: min(22rem, 100%);
+  height: auto;
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .plate-row { display: block; }
+  .plate-row img.plate, img.plate { width: min(20rem, 80%); margin: 2rem auto 0; }
+}
+
+@media (max-width: 767px) {
+  // Portrait de la home : il remplissait tout le premier ecran, et la
+  // question de recherche passait sous la ligne de flottaison.
+  .quarto-about-trestles .about-image { max-width: 9rem; }
+}
+
+@media print {
+  .plate { display: none; }
 }

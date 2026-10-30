@@ -4,7 +4,7 @@
     {
       "name": "quarto-preview",
       "runtimeExecutable": "quarto",
-      "runtimeArgs": ["preview", "--port", "4321", "--no-browser", "--no-watch-inputs"],
+      "runtimeArgs": ["preview", "--port", "4321", "--no-browser"],
       "port": 4321
     }
   ]

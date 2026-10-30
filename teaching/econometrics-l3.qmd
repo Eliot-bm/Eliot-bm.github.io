@@ -46,7 +46,7 @@ Plot.plot({
   ],
   x: {label: "Immigrant share of the workforce"},
   y: {label: "Relative wage", domain: [0, 5]},
-  style: {backgroundColor: "#EFE3CE", fontFamily: "Jost"},
+  style: {backgroundColor: "#FBF8F3", fontFamily: "Jost"},
   height: 300
 })
 ```

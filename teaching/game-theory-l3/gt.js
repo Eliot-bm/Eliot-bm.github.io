@@ -2,9 +2,21 @@
 // Rien ici ne decide d'une reponse a la place de l'etudiant : ce sont des
 // fonctions de calcul et de dessin. Chaque page declare ses propres jeux.
 
+// Les couleurs viennent de _brand.yml, via les variables CSS --brand-* que
+// Quarto pose sur la page : une couleur n'a qu'une source. Les widgets
+// dessinent des libelles avec ces couleurs ; ils prennent donc les variantes
+// de texte (crimson-ink, olive-ink) qui passent AA sur le papier.
+// Les valeurs de repli ne servent que si la variable manque (page hors Quarto).
+const brand = (nom, repli) => {
+  const v = typeof document === "undefined" ? "" :
+    getComputedStyle(document.documentElement).getPropertyValue(`--brand-${nom}`).trim();
+  return v || repli;
+};
 export const C = {
-  crimson: "#C8102E", gold: "#E8A33D", indigo: "#1E4C7C",
-  olive: "#5C7A47", umber: "#7B4B28", ink: "#1A1A1A", cream: "#EFE3CE"
+  crimson: brand("crimson-ink", "#A80D26"), gold: brand("gold", "#E8A33D"),
+  indigo: brand("indigo", "#1E4C7C"), olive: brand("olive-ink", "#47623A"),
+  umber: brand("umber", "#7B4B28"), ink: brand("ink", "#1A1A1A"),
+  cream: brand("cream", "#EFE3CE"), mute: brand("mute", "#524A3E")
 };
 
 export const plotStyle = {backgroundColor: C.cream, fontFamily: "Jost", fontSize: "12px"};
@@ -290,12 +302,12 @@ export function treeSVG(tree, step = 0) {
   for (const e of edges) {
     const resolved = solvable && e.from.h <= step;
     const chosen = resolved && e.from.best === e.i;
-    const stroke = !resolved ? C.ink : chosen ? C.crimson : "#8a8a8a";
+    const stroke = !resolved ? C.ink : chosen ? C.crimson : C.mute;
     const sw = chosen ? 3.4 : resolved ? 1.2 : 1.6;
     const dash = resolved && !chosen ? `stroke-dasharray="4,4"` : "";
     out += `<line x1="${e.from.x}" y1="${e.from.y}" x2="${e.to.x}" y2="${e.to.y}" stroke="${stroke}" stroke-width="${sw}" ${dash}/>`;
     const lx = e.from.x + (e.to.x - e.from.x) * 0.52, ly = e.from.y + (e.to.y - e.from.y) * 0.52 - 7;
-    out += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12.5" fill="${resolved && !chosen ? "#8a8a8a" : C.ink}" style="paint-order:stroke;stroke:white;stroke-width:4px">${e.a}</text>`;
+    out += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12.5" fill="${resolved && !chosen ? C.mute : C.ink}" style="paint-order:stroke;stroke:white;stroke-width:4px">${e.a}</text>`;
   }
   for (const n of nodes) {
     if (n.pay) {

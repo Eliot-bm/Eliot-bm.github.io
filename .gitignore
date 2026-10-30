@@ -5,3 +5,10 @@
 .RData
 
 **/*.quarto_ipynb
+
+# Articles sous copyright deposes pour preparer les TD (Springer, Taylor &
+# Francis, Duke UP). Le depot est public : ces PDF ne doivent jamais y entrer,
+# et aucune page ne doit y faire de lien, sans quoi Quarto les copie dans _site
+# et GitHub Pages les sert. Les .bib restent versionnes : ils ne contiennent
+# que des metadonnees.
+teaching/**/Articles/**/*.pdf
