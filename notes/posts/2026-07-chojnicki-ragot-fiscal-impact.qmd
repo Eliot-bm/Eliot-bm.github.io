@@ -1,11 +1,21 @@
 ---
 title: "Immigration and the ageing of the French welfare state"
 subtitle: "Replication note 1"
-description: "France's 2026 official projections put the 2050 old-age dependency ratio at 47.7% under central migration assumptions — almost exactly where Chojnicki and Ragot's 2012 no-immigration counterfactual stood."
+description: "Coming soon."
+# Description d'origine, retiree le 2026-11-02 (comparaison 44,2 / 47,7 a refaire a
+# perimetre egal, registre d'erratums B8) :
+# France's 2026 official projections put the 2050 old-age dependency ratio at 47.7% under central migration assumptions — almost exactly where Chojnicki and Ragot's 2012 no-immigration counterfactual stood.
 date: 2026-07-29
 categories: [replication, immigration, pensions, interactive]
 bibliography: references.bib
 ---
+
+Coming soon.
+
+::::: {.content-hidden when-format="html"}
+Texte masqué le 2026-11-02 : deux défauts établis (registre d'erratums B7, B8), à
+reprendre avant publication. Pour rétablir la note, supprimer cette mention et les
+lignes `:::::` d'ouverture et de fermeture.
 
 Chojnicki and Ragot [-@chojnicki2012] asked whether immigration could reduce the
 fiscal burden of population ageing in France. Their answer, from a dynamic
@@ -177,3 +187,4 @@ age, origin and qualification that are published only as a figure.
 Insee 2026 population projections and the 2021 census detailed file, both under
 Licence Ouverte 2.0. Extraction and computation scripts are in
 [`R/replication/`](https://github.com/Eliot-bm/Eliot-bm.github.io/tree/main/R/replication).
+:::::
