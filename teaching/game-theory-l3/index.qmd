@@ -6,8 +6,12 @@ date: 2026-09-08
 categories: [théorie des jeux, microéconomie, L3]
 ---
 
+::: {.content-hidden when-format="html"}
+Masqué le 2026-11-02, à rétablir une fois écrit.
+
 [À toi : deux phrases. Ce que l'étudiant saura faire à la fin, pas la liste des
 chapitres.]
+:::
 
 ## D'où vient ce champ
 
@@ -25,6 +29,9 @@ suivantes en ont raffiné les insuffisances : Selten pour les équilibres non
 crédibles, Harsanyi pour l'information incomplète, Schelling pour l'usage
 stratégique de l'engagement.
 
+::: {.content-hidden when-format="html"}
+Masqué le 2026-11-02, à rétablir une fois écrit.
+
 [À toi : ce que tu veux garder de ce cadrage, et l'accroche vers ta première
 séance.]
 
@@ -36,6 +43,7 @@ séance.]
 | 2 | [titre] | *à venir* |
 
 [À toi : la table des séances, une fois la plaquette de TD arrêtée.]
+:::
 
 ## Exercices corrigés et visualisations
 
@@ -68,4 +76,8 @@ Le calcul reste à faire sur papier. C'est lui qui est évalué.
 - Nash, J. (1951), « Non-Cooperative Games », *Annals of Mathematics* 54(2).
 - Schelling, T. (1960), *The Strategy of Conflict*, Harvard University Press.
 
+::: {.content-hidden when-format="html"}
+Masqué le 2026-11-02, à rétablir une fois écrit.
+
 [À toi : le manuel que tu imposes aux étudiants.]
+:::

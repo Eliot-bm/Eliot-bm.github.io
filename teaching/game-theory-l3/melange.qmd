@@ -230,9 +230,13 @@ Walker et Wooders trouvent par ailleurs que **les choix ne sont pas indépendant
 dans le temps** : même les meilleurs joueurs changent trop souvent de côté
 (p. 1521). Deux implications de la même théorie, deux verdicts différents.
 
+::: {.content-hidden when-format="html"}
+Masqué le 2026-11-02, à rétablir une fois écrit.
+
 [À toi : le problème ouvert qui prolonge cette page. Les joueurs de tennis
 mélangent-ils ? Quelles données demanderais-tu, et que conclurais-tu de chaque
 résultat possible ?]
+:::
 
 ## Repères
 

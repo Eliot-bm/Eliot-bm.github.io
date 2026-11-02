@@ -1,0 +1,19 @@
+---
+title: "Théorie de la croissance"
+subtitle: "L3, Université Paris Nanterre, 2026-2027, second semestre"
+description: "Travaux dirigés de théorie de la croissance en L3. Compagnons interactifs des séances."
+date: 2027-01-01
+categories: [croissance, macroéconomie, L3]
+draft: true
+---
+
+## D'où vient ce champ
+
+## Les séances
+
+| # | Séance | Page interactive |
+|---|---|---|
+
+## Exercices corrigés et visualisations
+
+## Repères bibliographiques

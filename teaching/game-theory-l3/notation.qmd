@@ -49,9 +49,13 @@ loterie, $p$ = un seul nombre dans la loterie.** Une stratégie pure est un cas
 particulier de stratégie mixte : $H$ s'écrit $\sigma_1=(1,0)$, $B$ s'écrit
 $\sigma_1=(0,1)$.
 
+::: {.content-hidden when-format="html"}
+Masqué le 2026-11-02, à rétablir une fois écrit.
+
 [À toi : aligne ces symboles sur ceux du cours de M. Souam. Si son manuel écrit
 $\Sigma_i$ ou $X_i$ à la place de $\Delta(S_i)$, c'est le moment de le dire aux
 étudiants, une fois, ici.]
+:::
 
 ## Un jeu, tous les objets
 
