@@ -1,9 +1,14 @@
 ---
 title: "Eliot Bochet-Merand"
 subtitle: "PhD candidate in economics"
+# Sans cette ligne, la carte de partage prendrait la premiere image de la page,
+# donc la figure decorative et non la carte du site.
+image: /assets/og-default.png
+image-alt: "Eliot Bochet-Merand, PhD candidate in economics, Paris Nanterre University. Five flat colour bars on an ivory ground."
 about:
   template: trestles
   image: assets/portrait.jpeg
+  image-alt: "Head-and-shoulders portrait of Eliot Bochet-Merand: a young man with short dark curly hair and a short beard, facing the camera, in a light blue collar."
   image-shape: rectangle
   image-width: 14em
   links:

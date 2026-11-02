@@ -64,11 +64,13 @@ color:
 
 typography:
   fonts:
+    # Bunny Fonts sert les memes polices que Google Fonts sans journaliser les
+    # visiteurs (societe europeenne). Evite l'appel a fonts.googleapis.com.
     - family: Jost
-      source: google
+      source: bunny
       weight: [400, 500]
     - family: Source Serif 4
-      source: google
+      source: bunny
       weight: [400, 600]
 
   base:

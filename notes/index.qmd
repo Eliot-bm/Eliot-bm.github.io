@@ -1,5 +1,7 @@
 ---
 title: "Notes"
+image: /assets/og-default.png
+image-alt: "Eliot Bochet-Merand, PhD candidate in economics, Paris Nanterre University. Five flat colour bars on an ivory ground."
 listing:
   contents: posts
   type: default

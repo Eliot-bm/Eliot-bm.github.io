@@ -12,10 +12,22 @@ project:
   render:
     - "**/*.qmd"
 
+  # L'image de partage n'est referencee par aucune page : sans cette ligne,
+  # Quarto ne la copie pas dans _site.
+  resources:
+    - assets/og-default.png
+
 website:
   title: "Eliot Bochet-Merand"
   description: "Economics of immigration and technical change"
   site-url: "https://eliot-bm.github.io"
+
+  # Carte de partage par defaut. Une page qui a son propre `image:` la remplace.
+  # Generee par R/decor/make_og.R (1200 x 630).
+  open-graph: true
+  twitter-card: true
+  image: /assets/og-default.png
+  image-alt: "Eliot Bochet-Merand, PhD candidate in economics, Paris Nanterre University. Five flat colour bars on an ivory ground."
 
   navbar:
     # Ordre = hierarchie de tes priorites. Research avant tout le reste.
