@@ -112,6 +112,19 @@ Pas encore créés, à faire avant le premier vrai déploiement public :
 - `_includes/analytics.html` — script GoatCounter + events PDF.
 - `_freeze/` — apparaîtra automatiquement au premier `quarto render` d'un `.qmd` computationnel.
 
+### Graphiques OJS (Plot / D3)
+
+- `assets/js/dubois-theme.js` : thème unique, jumeau de `R/theme_dubois.R`. Couleurs lues
+  dans `_brand.yml` (variables `--brand-*`) : aucun hexadécimal dans les graphiques.
+  `Plot.plot({...plotOptions(), marks})`.
+- `assets/js/dubois-motion.js` : règles de tout graphique animé, appliquées par le code
+  (`animatedFigure`) : pause, `prefers-reduced-motion`, CSV, texte alternatif obligatoires.
+- Pilote : `teaching/game-theory-l3/gt-arbre-anime.js`, utilisé dans `sequentiel.qmd`.
+- Pièges : (1) l'aperçu Quarto ne relit pas les `.js` ni parfois les `.qmd` modifiés :
+  arrêter l'aperçu, `quarto render <page>`, relancer. (2) Quarto pose `background: none`
+  sur chaque svg Plot (bug 7426) : le fond passe par `--figure-ground` dans `styles.scss`.
+  (3) Chrome garde les modules en cache : recharger après un rendu.
+
 ---
 
 ## 5. Definition of done — nouvelle page de paper

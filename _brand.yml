@@ -51,6 +51,9 @@ color:
     plate-green:   "#00AA00"
     plate-brown:   "#654321"
     plate-pink:    "#FFC0CB"
+    # Extension hors planches, presente dans R/theme_dubois.R (6e categorie).
+    # Ajoutee ici pour que le theme web et le theme R aient la meme palette.
+    plate-purple:  "#7E6583"
     # Feuille dechiree sous les disques : teinte des scans des planches (mesuree).
     plate-sheet:   "#EADBC8"
 

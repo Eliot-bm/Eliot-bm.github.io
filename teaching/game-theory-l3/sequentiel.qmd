@@ -36,6 +36,7 @@ nœud, chaque choix possible donne un équilibre différent.
 ```{ojs}
 //| echo: false
 import {C, plotStyle, fr, toNode, pureNE, matrixTable, treeSVG, treeStepText, treeHeight} from "./gt.js"
+import {arbreAnime} from "./gt-arbre-anime.js"
 
 // Un même geste pour tous les arbres de la page.
 function arbre(tree, step) {
@@ -68,7 +69,8 @@ pour lui, $1$ pour l'autre). Le répondeur (joueur 2) voit la proposition et
 4. Résoudre par backward induction. Quel est l'équilibre parfait en sous-jeux ?
 5. Pourquoi les autres équilibres de Nash ne sont-ils pas parfaits ?
 
-Faites avancer le curseur pour exécuter la backward induction.
+La figure exécute la backward induction étape par étape. Mettez-la en pause, ou
+avancez avec les boutons ‹ et ›.
 
 ::: {.td-app}
 
@@ -80,12 +82,14 @@ T1 = ({who: 1, name: "« Proposeur »", kids: [
   {a: "Inéquitable", n: {who: 2, name: "« Répondeur, après Inéquitable »", kids: [
     {a: "Accepter", n: {pay: [3, 1]}}, {a: "Refuser", n: {pay: [0, 0]}}]}}
 ]})
-viewof st1 = Inputs.range([0, treeHeight(T1)], {value: 0, step: 1, label: "étape de la backward induction"})
 ```
 
 ```{ojs}
 //| echo: false
-arbre(T1, st1)
+arbreAnime(d3, T1, {invalidation, titre: "Jeu de l'ultimatum", labels: {
+  group: "Commandes de l'animation", play: "Lecture", pause: "Pause", replay: "Rejouer",
+  prev: "Étape précédente", next: "Étape suivante",
+  step: (k, n) => `Étape ${k} sur ${n}`, csv: "Télécharger les données (CSV)"}})
 ```
 
 :::
@@ -132,7 +136,7 @@ Cases soulignées par les deux : $(E,AR)$, $(I,AA)$, $(I,RA)$. **Trois équilibr
 Nash.** Cochez la case ci-dessous pour les voir sur la matrice.
 
 **Question 4. Backward induction.** On part des nœuds du bas, ceux où le joueur 2
-décide (étape 1 du curseur).
+décide (étape 1 de la figure).
 
 - Après $E$ : accepter donne $2$, refuser donne $0$. Il **accepte**.
 - Après $I$ : accepter donne $1$, refuser donne $0$. Il **accepte**.
