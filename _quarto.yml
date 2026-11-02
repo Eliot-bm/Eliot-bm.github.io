@@ -30,16 +30,18 @@ website:
   image-alt: "Eliot Bochet-Merand, PhD candidate in economics, Paris Nanterre University. Five flat colour bars on an ivory ground."
 
   navbar:
-    # Ordre = hierarchie de tes priorites. Research avant tout le reste.
+    # Ordre = hierarchie de tes priorites. Working papers avant tout le reste.
+    # Les libelles changent, pas les dossiers : research/ et notes/ gardent leur
+    # adresse, donc aucun lien entrant ne casse.
     left:
       - href: index.qmd
         text: Home
       - href: research/index.qmd
-        text: Research
+        text: Working papers
       - href: teaching/index.qmd
         text: Teaching
       - href: notes/index.qmd
-        text: Notes
+        text: Blog
       - href: cv/index.qmd
         text: CV
     right:
