@@ -14,9 +14,8 @@ page-layout: full
 
 ::: {.plate-row}
 ::: {}
-Essays and replications. Each one comes with the code, and most come with a
-video. Replications rerun a canonical paper in the field and report what turns
-up, including when nothing does.
+Essays and replications. Replications rerun a canonical paper in the field and
+report what turns up, including when nothing does.
 :::
 
 ![](../assets/decor/disques.webp){.plate alt=""}

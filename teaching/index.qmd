@@ -15,8 +15,9 @@ listing:
 page-layout: full
 ---
 
-Deux cours cette année. Chaque page rassemble la plaquette de travaux dirigés et
-les compagnons interactifs des séances : les modèles y sont manipulables, et
-chaque hypothèse peut être retirée pour voir ce qu'elle tenait.
+Chaque page de cours rassemble la plaquette de travaux dirigés et les compagnons
+interactifs des séances : les modèles y sont manipulables, et chaque hypothèse
+peut être retirée pour voir ce qu'elle tenait.
 
-Aucune correction n'est publiée.
+Les exercices corrigés portent sur des énoncés inédits, qui ne reprennent pas
+ceux des fiches de TD.

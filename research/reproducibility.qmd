@@ -6,17 +6,17 @@ categories: [methods, reproducibility]
 
 Parts of this research use data accessed through the Centre d'acces securise aux
 donnees (CASD). No observation can leave the enclave. Confidentiality restricts
-the *data*, not the *code* : everything except the microdata is published here.
+the *data*, not the *code* : everything except the microdata will be published here.
 
-## What is available
+## What will be available
 
 **The full pipeline.** Cleaning, variable construction, and every specification,
 in the order they run.
 
-**A synthetic data generator.** It reproduces the structure of the source files
+**A synthetic data generator.** It will reproduce the structure of the source files
 (the same variables, types, and plausible marginal distributions) with no real
 observation. Clone the repository, run the pipeline on synthetic input, and the
-whole chain executes. A referee can audit the logic without clearance.
+whole chain will execute. A referee will be able to audit the logic without clearance.
 
 **A metadata dictionary.** Every variable, its source file, and how it was built.
 
