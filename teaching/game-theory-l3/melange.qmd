@@ -61,13 +61,13 @@ viewof qL = Inputs.range([0, 1], {value: 0.5, step: 0.01, label: "q (joueur 2 jo
   const ind = indifference(A, B, pU, qL);
   const style = "font-family:Jost;font-size:.9rem;max-width:34rem;margin:.25rem 0";
   const msg = html`<div>
-    <p style="${style}"><span style="color:${C.crimson};font-weight:600">Joueur 2</span>,
+    <p style="${style}"><span style="color:${C.crimsonText};font-weight:600">Joueur 2</span>,
       face à votre mélange (p = ${fr(pU)}) : L rapporte <b>${fr(ind.joueur2.pure1)}</b>,
       R rapporte <b>${fr(ind.joueur2.pure2)}</b>. Écart : ${fr(ind.joueur2.ecart)}.</p>
-    <p style="${style}"><span style="color:${C.indigo};font-weight:600">Joueur 1</span>,
+    <p style="${style}"><span style="color:${C.blueText};font-weight:600">Joueur 1</span>,
       face à votre mélange (q = ${fr(qL)}) : U rapporte <b>${fr(ind.joueur1.pure1)}</b>,
       D rapporte <b>${fr(ind.joueur1.pure2)}</b>. Écart : ${fr(ind.joueur1.ecart)}.</p>
-    <p style="${style};color:${C.umber}">Souligné : meilleure réponse (bleu : joueur 1,
+    <p style="${style};color:${C.brown}">Souligné : meilleure réponse (bleu : joueur 1,
       rouge : joueur 2). Deux gains à moins de ${fr(EPS_EGAL)} sont lus égaux, car un curseur
       au pas de 0,01 ne peut pas viser un mélange exact. Case dorée : le mélange
       de chaque joueur est une meilleure réponse à celui de l'autre.</p>
@@ -155,9 +155,9 @@ Plot.plot({
   y: {domain: [0, 1], label: "↑ p-value du test d'égalité des taux"},
   marks: [
     Plot.ruleY([alpha], {stroke: C.crimson, strokeDasharray: "5,3"}),
-    Plot.text([[1, alpha]], {text: [`seuil ${fr(alpha * 100, 0)} %`], textAnchor: "start", dy: -8, fill: C.crimson}),
+    Plot.text([[1, alpha]], {text: [`seuil ${fr(alpha * 100, 0)} %`], textAnchor: "start", dy: -8, fill: C.crimsonText}),
     Plot.dot(pvals.slice().sort((a, b) => a - b).map((v, i) => ({i, v})),
-             {x: "i", y: "v", fill: d => d.v < alpha ? C.crimson : C.indigo, r: 4.5, stroke: "white"})
+             {x: "i", y: "v", fill: d => d.v < alpha ? C.crimson : C.blue, r: 4.5, stroke: C.cream})
   ]
 })
 ```
@@ -165,12 +165,12 @@ Plot.plot({
 ```{ojs}
 //| echo: false
 html`<p style="font-family:Jost;font-size:.95rem;max-width:34rem">
-  <b style="color:${C.crimson}">${rejets} rejet${rejets > 1 ? "s" : ""}</b> sur 40 au seuil de ${fr(alpha * 100, 0)} %.
+  <b style="color:${C.crimsonText}">${rejets} rejet${rejets > 1 ? "s" : ""}</b> sur 40 au seuil de ${fr(alpha * 100, 0)} %.
   Si l'équilibre est vrai, on en attend en moyenne 40 × ${fr(alpha)} = <b>${fr(40 * alpha, 1)}</b>.</p>`
 ```
 
 Un seul tirage ne dit presque rien. Voici ce que donnent **500 tirages** de 40 jeux :
-en gris, quand l'équilibre est vrai (écart nul) ; en rouge, avec l'écart que vous avez
+en bleu, quand l'équilibre est vrai (écart nul) ; en rouge, avec l'écart que vous avez
 choisi.
 
 ```{ojs}
@@ -189,7 +189,7 @@ recouvrement = repNul.reduce((s, x, i) => s + Math.min(x.part, repAlt[i].part), 
     x: {label: "nombre de rejets sur 40 jeux-points →", tickFormat: "d", domain: d3.range(0, kmax + 1)},
     y: {label: "↑ part des 500 tirages", tickFormat: ".0%"},
     marks: [
-      Plot.barY(garde(repNul), {x: "k", y: "part", fill: "#8a8a8a", fillOpacity: .6}),
+      Plot.barY(garde(repNul), {x: "k", y: "part", fill: C.blue, fillOpacity: .6}),
       ecart > 0 ? Plot.barY(garde(repAlt), {x: "k", y: "part", fill: C.crimson, fillOpacity: .5}) : null,
       Plot.ruleY([0])
     ]

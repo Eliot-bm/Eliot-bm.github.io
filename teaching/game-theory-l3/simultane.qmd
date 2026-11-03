@@ -193,7 +193,7 @@ viewof show2 = Inputs.toggle({label: "souligner les meilleures réponses", value
   const tab = toNode(matrixTable(A2, B2, ["H", "M", "B"], ["G", "C", "D"], {underline: show2, rowTitle: "Joueur 1", colTitle: "Joueur 2"}));
   const ne = pureNE(A2, B2).map(([i, j]) => `(${["H", "M", "B"][i]} ; ${["G", "C", "D"][j]})`);
   const cap = show2
-    ? `<p style="font-family:Jost;font-size:.9rem;max-width:34rem"><span style="border-bottom:2px solid ${C.indigo}">Bleu</span> : meilleure réponse du joueur 1, colonne par colonne. <span style="border-bottom:2px solid ${C.crimson}">Rouge</span> : meilleure réponse du joueur 2, ligne par ligne. Case dorée : les deux. Équilibres : ${ne.join(" et ")}.</p>`
+    ? `<p style="font-family:Jost;font-size:.9rem;max-width:34rem"><span style="border-bottom:2px solid ${C.blue}">Bleu</span> : meilleure réponse du joueur 1, colonne par colonne. <span style="border-bottom:2px solid ${C.crimson}">Rouge</span> : meilleure réponse du joueur 2, ligne par ligne. Case dorée : les deux. Équilibres : ${ne.join(" et ")}.</p>`
     : `<p style="font-family:Jost;font-size:.9rem;max-width:34rem">Cherchez d'abord sur papier, puis cochez la case.</p>`;
   return html`<div>${tab}${toNode(cap)}</div>`;
 }
@@ -273,7 +273,7 @@ Plot.plot({
   x: {domain: [-0.04, 1.04], label: "p : probabilité que le chasseur 1 joue C →", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
   y: {domain: [-0.04, 1.04], label: "↑ q : probabilité que le chasseur 2 joue C", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
   marks: [
-    Plot.line(brs3.rowPath, {x: "x", y: "y", z: "g", stroke: C.indigo, strokeWidth: 3.5}),
+    Plot.line(brs3.rowPath, {x: "x", y: "y", z: "g", stroke: C.blue, strokeWidth: 3.5}),
     Plot.line(brs3.colPath, {x: "x", y: "y", z: "g", stroke: C.crimson, strokeWidth: 3.5}),
     ...eqMarks(Plot, brs3.eq)
   ]
@@ -283,10 +283,10 @@ Plot.plot({
 ```{ojs}
 //| echo: false
 html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
-  <span style="color:${C.indigo};font-weight:600">Bleu</span> : meilleure réponse du chasseur 1
+  <span style="color:${C.blueText};font-weight:600">Bleu</span> : meilleure réponse du chasseur 1
   (le <i>p</i> qu'il choisit, selon le <i>q</i> de l'autre).
-  <span style="color:${C.crimson};font-weight:600">Rouge</span> : meilleure réponse du chasseur 2.
-  <span style="color:${C.olive};font-weight:600">Points verts</span> : les intersections,
+  <span style="color:${C.crimsonText};font-weight:600">Rouge</span> : meilleure réponse du chasseur 2.
+  <span style="color:${C.greenText};font-weight:600">Points verts</span> : les intersections,
   c'est-à-dire les équilibres. Il y en a ${brs3.eq.length}.</p>`
 ```
 
@@ -397,14 +397,14 @@ g4 = gains2x2(A4, B4, brs4.ps, brs4.qs)
     x: {domain: [-0.04, 1.04], label: "p : probabilité que l'employeur contrôle →", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
     y: {domain: [-0.04, 1.04], label: "↑ q : probabilité que le salarié travaille", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
     marks: [
-      Plot.line(brs4.rowPath, {x: "x", y: "y", z: "g", stroke: C.indigo, strokeWidth: 3.5}),
+      Plot.line(brs4.rowPath, {x: "x", y: "y", z: "g", stroke: C.blue, strokeWidth: 3.5}),
       Plot.line(brs4.colPath, {x: "x", y: "y", z: "g", stroke: C.crimson, strokeWidth: 3.5}),
       ...eqMarks(Plot, brs4.eq)
     ]
   });
   const txt = html`<p style="font-family:Jost;font-size:.9rem;max-width:34rem">
-    <span style="color:${C.indigo};font-weight:600">Bleu</span> : employeur.
-    <span style="color:${C.crimson};font-weight:600">Rouge</span> : salarié.
+    <span style="color:${C.blueText};font-weight:600">Bleu</span> : employeur.
+    <span style="color:${C.crimsonText};font-weight:600">Rouge</span> : salarié.
     Équilibres purs trouvés : <b>${brs4.eq.filter(e => e.kind === "pur").length}</b>.
     Équilibre mixte : <i>p</i>* = ${fr(brs4.ps)}, <i>q</i>* = ${fr(brs4.qs)}.
     Gains espérés : employeur ${fr(g4.u1)}, salarié ${fr(g4.u2)}.</p>`;
@@ -530,7 +530,7 @@ brsF = br2x2(Af, Bf)
     x: {domain: [-0.04, 1.04], label: "p : probabilité de la ligne 1 →", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
     y: {domain: [-0.04, 1.04], label: "↑ q : probabilité de la colonne 1", ticks: [0, 0.25, 0.5, 0.75, 1], tickFormat: d => String(d).replace(".", ",")},
     marks: [
-      Plot.line(brsF.rowPath, {x: "x", y: "y", z: "g", stroke: C.indigo, strokeWidth: 3.5}),
+      Plot.line(brsF.rowPath, {x: "x", y: "y", z: "g", stroke: C.blue, strokeWidth: 3.5}),
       Plot.line(brsF.colPath, {x: "x", y: "y", z: "g", stroke: C.crimson, strokeWidth: 3.5}),
       ...eqMarks(Plot, brsF.eq)
     ]

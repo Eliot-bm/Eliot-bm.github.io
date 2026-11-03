@@ -137,13 +137,13 @@ Plot.plot({
   x: {domain: [0, 1], label: "p, probabilité de jouer H →"},
   y: {domain: [0, 4.2], label: "↑ gain espéré du joueur 1"},
   marks: [
-    Plot.line([[0, uB], [1, uH]], {stroke: C.indigo, strokeWidth: 2.4}),
-    Plot.dot([[0, uB]], {fill: C.umber, r: 5}),
-    Plot.dot([[1, uH]], {fill: C.umber, r: 5}),
-    Plot.text([[0.02, uB]], {text: [`B pur : ${fr(uB)}`], textAnchor: "start", dy: -12, fill: C.umber}),
-    Plot.text([[0.98, uH]], {text: [`H pur : ${fr(uH)}`], textAnchor: "end", dy: -12, fill: C.umber}),
+    Plot.line([[0, uB], [1, uH]], {stroke: C.blue, strokeWidth: 2.4}),
+    Plot.dot([[0, uB]], {fill: C.brown, r: 5}),
+    Plot.dot([[1, uH]], {fill: C.brown, r: 5}),
+    Plot.text([[0.02, uB]], {text: [`B pur : ${fr(uB)}`], textAnchor: "start", dy: -12, fill: C.brown}),
+    Plot.text([[0.98, uH]], {text: [`H pur : ${fr(uH)}`], textAnchor: "end", dy: -12, fill: C.brown}),
     Plot.ruleX([p], {stroke: C.crimson, strokeDasharray: "4,3"}),
-    Plot.dot([[p, p * uH + (1 - p) * uB]], {fill: C.crimson, r: 6.5, stroke: "white"}),
+    Plot.dot([[p, p * uH + (1 - p) * uB]], {fill: C.crimson, r: 6.5, stroke: C.cream}),
     Plot.ruleY([0], {stroke: C.ink, strokeOpacity: .25})
   ]
 })

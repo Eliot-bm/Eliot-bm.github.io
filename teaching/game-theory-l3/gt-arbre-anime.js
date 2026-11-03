@@ -11,9 +11,10 @@ const num = (x) => String(x).replace("-", "−");
 
 export function arbreAnime(d3, tree, {invalidation, titre = "Arbre du jeu", labels} = {}) {
   const t = solveTree(tree);
-  // Joueurs 1, 2, 3 : variantes qui portent un chiffre clair avec contraste AA.
-  const PCOL = {1: brandColor("indigo"), 2: brandColor("crimson-ink"), 3: brandColor("olive-ink")};
-  const valueInk = brandColor("olive-ink");
+  // Joueurs 1, 2, 3 : memes aplats et memes chiffres que treeSVG (gt.js).
+  const PCOL = {1: brandColor("plate-blue"), 2: brandColor("plate-crimson"), 3: brandColor("plate-green")};
+  const PLAB = {1: cream, 2: cream, 3: ink};
+  const valueInk = brandColor("green-ink");
 
   // --- Mise en page : identique a treeSVG ---------------------------------------
   const dx = 150, dy = 58, X0 = 36, Y0 = 34;
@@ -75,7 +76,7 @@ export function arbreAnime(d3, tree, {invalidation, titre = "Arbre du jeu", labe
       eg.append("line").attr("class", "choisie")
         .attr("x1", e => e.from.x).attr("y1", e => e.from.y)
         .attr("x2", e => e.to.x).attr("y2", e => e.to.y)
-        .attr("stroke", brandColor("crimson-ink")).attr("stroke-width", 3.4)
+        .attr("stroke", brandColor("plate-crimson")).attr("stroke-width", 3.4)
         .attr("stroke-dasharray", e => len(e)).attr("stroke-dashoffset", e => len(e));
       eg.append("text").attr("class", "etiquette")
         .attr("x", e => e.from.x + (e.to.x - e.from.x) * 0.52)
@@ -86,15 +87,15 @@ export function arbreAnime(d3, tree, {invalidation, titre = "Arbre du jeu", labe
 
       const dec = nodes.filter(n => !n.pay);
       svg.selectAll("circle.noeud").data(dec).join("circle").attr("class", "noeud")
-        .attr("cx", n => n.x).attr("cy", n => n.y).attr("r", 12).attr("fill", n => PCOL[n.who]);
+        .attr("cx", n => n.x).attr("cy", n => n.y).attr("r", 14).attr("fill", n => PCOL[n.who]);
       svg.selectAll("text.joueur").data(dec).join("text").attr("class", "joueur")
-        .attr("x", n => n.x).attr("y", n => n.y + 4.5).attr("text-anchor", "middle")
-        .attr("font-size", 13).attr("font-weight", 600).attr("fill", cream).text(n => n.who);
+        .attr("x", n => n.x).attr("y", n => n.y + 6.5).attr("text-anchor", "middle")
+        .attr("font-size", 19).attr("font-weight", 600).attr("fill", n => PLAB[n.who]).text(n => n.who);
       svg.selectAll("text.gain").data(nodes.filter(n => n.pay)).join("text").attr("class", "gain")
         .attr("x", n => n.x + 10).attr("y", n => n.y + 4.5).attr("font-size", 14).attr("fill", ink)
         .text(n => `(${n.pay.map(num).join(" ; ")})`);
       const val = svg.selectAll("text.valeur").data(dec).join("text").attr("class", "valeur")
-        .attr("x", n => n.x).attr("y", n => n.y - 18).attr("text-anchor", "middle")
+        .attr("x", n => n.x).attr("y", n => n.y - 20).attr("text-anchor", "middle")
         .attr("font-size", 12.5).attr("font-weight", 600).attr("fill", valueInk)
         .style("paint-order", "stroke").style("stroke", cream).style("stroke-width", "4px")
         .attr("opacity", 0).text(n => `↦ (${n.val.map(num).join(" ; ")})`);

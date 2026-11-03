@@ -11,15 +11,18 @@
 # ROLES des couleurs :
 #   paper       : fond de toutes les pages.
 #   ink         : texte, filets.
-#   crimson-ink : liens (le seul crimson qui passe AA sur le papier).
-#   crimson     : aplats de figure, filet de navigation, joueur 2 des widgets.
-#   indigo      : aplats de figure, joueur 1 des widgets.
-#   gold, olive, umber : aplats de figure, jamais du texte courant.
+#   crimson-ink : liens ; texte rouge des widgets (joueur 2).
+#   indigo      : texte bleu des widgets (joueur 1) : le bleu des planches, fonce.
+#   green-ink   : texte vert des widgets : le vert des planches, fonce.
 #   cream       : fond des figures et widgets (un cran plus clair que le papier).
-#   plate-*     : palette officielle du guide Du Boisian (A. Starks), figures seulement.
+#   plate-*     : palette officielle du guide Du Boisian (A. Starks) : TOUS les
+#                 aplats, traits et points des figures et des widgets.
+#   gold, olive, umber : ancienne palette ; olive et umber ne servent plus aux widgets.
 # Contrastes sur le papier (WCAG AA = 4,5:1 pour le texte) : ink 15,3 ; indigo 7,7 ;
-# mute 7,7 ; crimson-ink 6,7 ; olive-ink 6,0 ; crimson 4,38 et plate-blue 3,6 (aplats
-# seulement) ; gold < 2 : aplats seulement, jamais du texte.
+# mute 7,7 ; crimson-ink 6,7 ; olive-ink 6,0 ; green-ink 4,9 ; crimson 4,38 et
+# plate-blue 3,6 (aplats seulement) ; gold < 2 : aplats seulement, jamais du texte.
+# Sur la creme des widgets, en aplat (WCAG 1.4.11 = 3:1) : plate-crimson 4,7 ;
+# plate-blue 3,9 ; plate-green 2,9, d'ou un filet d'encre autour des points verts.
 
 meta:
   name: Eliot Bochet-Merand
@@ -42,6 +45,9 @@ color:
     # le gris des etiquettes ne passent pas AA sur le papier.
     olive-ink: "#47623A"
     mute: "#524A3E"
+    # Vert de texte des widgets : meme teinte que plate-green (#00AA00, 2,8:1 sur
+    # le papier), assombrie jusqu'a 4,9:1.
+    green-ink: "#007A00"
     # Planches authentiques de 1900 (figures uniquement).
     plate-black:   "#000000"
     plate-tan:     "#D2B48C"

@@ -361,12 +361,12 @@ viewof delta = Inputs.range([0.1, 0.95], {value: 0.6, step: 0.05, label: "δ (pa
     marginLeft: 56, marginBottom: 46,
     x: {domain: [0, 1], label: "δ →"},
     y: {domain: [0, 10], label: "↑ part obtenue à l'équilibre"},
-    color: {domain: ["Joueur 1", "Joueur 2"], range: [C.indigo, C.crimson], legend: true},
+    color: {domain: ["Joueur 1", "Joueur 2"], range: [C.blue, C.crimson], legend: true},
     marks: [
       Plot.line(courbe, {x: "d", y: "v", stroke: "j", strokeWidth: 2.4}),
       Plot.ruleX([delta], {stroke: C.ink, strokeDasharray: "4,3"}),
       Plot.dot([{d: delta, v: part1, j: "Joueur 1"}, {d: delta, v: part2, j: "Joueur 2"}],
-               {x: "d", y: "v", fill: "j", r: 6, stroke: "white"}),
+               {x: "d", y: "v", fill: "j", r: 6, stroke: C.cream}),
       Plot.ruleY([5], {stroke: C.ink, strokeOpacity: .2})
     ]
   });

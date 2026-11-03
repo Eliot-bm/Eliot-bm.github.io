@@ -2,21 +2,20 @@
 // Rien ici ne decide d'une reponse a la place de l'etudiant : ce sont des
 // fonctions de calcul et de dessin. Chaque page declare ses propres jeux.
 
-// Les couleurs viennent de _brand.yml, via les variables CSS --brand-* que
-// Quarto pose sur la page : une couleur n'a qu'une source. Les widgets
-// dessinent des libelles avec ces couleurs ; ils prennent donc les variantes
-// de texte (crimson-ink, olive-ink) qui passent AA sur le papier.
-// Les valeurs de repli ne servent que si la variable manque (page hors Quarto).
-const brand = (nom, repli) => {
-  const v = typeof document === "undefined" ? "" :
-    getComputedStyle(document.documentElement).getPropertyValue(`--brand-${nom}`).trim();
-  return v || repli;
-};
+import {brandColor} from "../../assets/js/dubois-theme.js";
+
+// Les couleurs viennent de _brand.yml, lues par brandColor (dubois-theme.js) :
+// une couleur n'a qu'une source, et une variable absente leve une erreur.
+// Deux familles :
+//   aplats, traits, points : couleurs des planches de 1900 (plate-*) ;
+//   texte en couleur : la meme teinte, foncee (*Text), seule a passer AA.
 export const C = {
-  crimson: brand("crimson-ink", "#A80D26"), gold: brand("gold", "#E8A33D"),
-  indigo: brand("indigo", "#1E4C7C"), olive: brand("olive-ink", "#47623A"),
-  umber: brand("umber", "#7B4B28"), ink: brand("ink", "#1A1A1A"),
-  cream: brand("cream", "#EFE3CE"), mute: brand("mute", "#524A3E")
+  blue: brandColor("plate-blue"), crimson: brandColor("plate-crimson"),
+  green: brandColor("plate-green"), gold: brandColor("plate-gold"),
+  brown: brandColor("plate-brown"),
+  blueText: brandColor("indigo"), crimsonText: brandColor("crimson-ink"),
+  greenText: brandColor("green-ink"),
+  ink: brandColor("ink"), cream: brandColor("cream"), mute: brandColor("mute")
 };
 
 export const plotStyle = {backgroundColor: C.cream, fontFamily: "Jost", fontSize: "12px"};
@@ -94,7 +93,7 @@ export function matrixTable(A, B, rowNames, colNames, opt = {}) {
     let bg = "";
     if (underline && !dead) {
       const ur = A[i][j] === maxRowInCol(j), uc = B[i][j] === maxColInRow(i);
-      if (ur) a = `<span style="border-bottom:2px solid ${C.indigo}">${num(A[i][j])}</span>`;
+      if (ur) a = `<span style="border-bottom:2px solid ${C.blue}">${num(A[i][j])}</span>`;
       if (uc) b = `<span style="border-bottom:2px solid ${C.crimson}">${num(B[i][j])}</span>`;
       if (ur && uc) bg = `background:${C.gold}55;`;
     }
@@ -107,8 +106,8 @@ export function matrixTable(A, B, rowNames, colNames, opt = {}) {
   const body = rowNames.map((n, i) =>
     `<tr><th style="padding:.3rem .8rem;text-align:right;${deadRows.includes(i) ? "opacity:.3;text-decoration:line-through;" : ""}">${n}</th>${colNames.map((_, j) => cell(i, j)).join("")}</tr>`).join("");
   return `<table style="font-family:Jost,sans-serif;font-size:.95rem;border-collapse:collapse;margin:.4rem 0">
-    <tr><th></th><th colspan="${colNames.length}" style="text-align:center;color:${C.crimson};font-weight:500">${colTitle}</th></tr>
-    <tr><th style="color:${C.indigo};font-weight:500;text-align:right">${rowTitle}</th>${head}</tr>${body}</table>`;
+    <tr><th></th><th colspan="${colNames.length}" style="text-align:center;color:${C.crimsonText};font-weight:500">${colTitle}</th></tr>
+    <tr><th style="color:${C.blueText};font-weight:500;text-align:right">${rowTitle}</th>${head}</tr>${body}</table>`;
 }
 
 // ---------------------------------------------------------------------------
@@ -174,7 +173,8 @@ export function eqMarks(Plot, eq) {
     x: "p", y: "q", text: lab, textAnchor: anchor, dx, dy: -16, fill: C.ink, fontWeight: 600
   });
   return [
-    Plot.dot(eq, {x: "p", y: "q", fill: C.olive, r: 8, stroke: "white", strokeWidth: 2}),
+    // Filet d'encre : le vert des planches ne fait que 2,9:1 sur la creme.
+    Plot.dot(eq, {x: "p", y: "q", fill: C.green, r: 8, stroke: C.ink, strokeWidth: 1}),
     side(d => d.p < 0.1, "start", 10),
     side(d => d.p > 0.9, "end", -10),
     side(d => d.p >= 0.1 && d.p <= 0.9, "middle", 0)
@@ -188,7 +188,7 @@ export function eqMarks(Plot, eq) {
 export function mosaicSVG(A, B, p, q, rowNames, colNames) {
   const S = 300, X0 = 78, Y0 = 44, W = X0 + S + 20, H = Y0 + S + 16;
   const xs = [X0, X0 + S * q, X0 + S], ys = [Y0, Y0 + S * p, Y0 + S];
-  const fills = [[C.indigo, C.gold], [C.olive, C.crimson]];
+  const fills = [[C.blue, C.gold], [C.green, C.crimson]];
   let out = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W + 60}px;font-family:Jost,sans-serif" role="img" aria-label="Mosaïque des probabilités du profil mixte">`;
   for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
     const x = xs[j], w = xs[j + 1] - xs[j], y = ys[i], h = ys[i + 1] - ys[i];
@@ -196,17 +196,17 @@ export function mosaicSVG(A, B, p, q, rowNames, colNames) {
     out += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fills[i][j]}" fill-opacity=".28" stroke="${C.ink}" stroke-width="1"/>`;
     if (w > 62 && h > 40) {
       out += `<text x="${x + w / 2}" y="${y + h / 2 - 4}" text-anchor="middle" font-size="13" fill="${C.ink}">(${num(A[i][j])} ; ${num(B[i][j])})</text>`;
-      out += `<text x="${x + w / 2}" y="${y + h / 2 + 13}" text-anchor="middle" font-size="11.5" fill="${C.umber}">prob. ${fr(prob, 3)}</text>`;
+      out += `<text x="${x + w / 2}" y="${y + h / 2 + 13}" text-anchor="middle" font-size="11.5" fill="${C.brown}">prob. ${fr(prob, 3)}</text>`;
     }
   }
-  out += `<text x="${(xs[0] + xs[1]) / 2}" y="${Y0 - 20}" text-anchor="middle" font-size="12.5" fill="${C.crimson}">${colNames[0]}</text>`;
-  out += `<text x="${(xs[1] + xs[2]) / 2}" y="${Y0 - 20}" text-anchor="middle" font-size="12.5" fill="${C.crimson}">${colNames[1]}</text>`;
-  out += `<text x="${(xs[0] + xs[1]) / 2}" y="${Y0 - 6}" text-anchor="middle" font-size="11" fill="${C.crimson}">q = ${fr(q)}</text>`;
-  out += `<text x="${(xs[1] + xs[2]) / 2}" y="${Y0 - 6}" text-anchor="middle" font-size="11" fill="${C.crimson}">1−q = ${fr(1 - q)}</text>`;
-  out += `<text x="${X0 - 8}" y="${(ys[0] + ys[1]) / 2 - 2}" text-anchor="end" font-size="12.5" fill="${C.indigo}">${rowNames[0]}</text>`;
-  out += `<text x="${X0 - 8}" y="${(ys[0] + ys[1]) / 2 + 12}" text-anchor="end" font-size="11" fill="${C.indigo}">p = ${fr(p)}</text>`;
-  out += `<text x="${X0 - 8}" y="${(ys[1] + ys[2]) / 2 - 2}" text-anchor="end" font-size="12.5" fill="${C.indigo}">${rowNames[1]}</text>`;
-  out += `<text x="${X0 - 8}" y="${(ys[1] + ys[2]) / 2 + 12}" text-anchor="end" font-size="11" fill="${C.indigo}">1−p = ${fr(1 - p)}</text>`;
+  out += `<text x="${(xs[0] + xs[1]) / 2}" y="${Y0 - 20}" text-anchor="middle" font-size="12.5" fill="${C.crimsonText}">${colNames[0]}</text>`;
+  out += `<text x="${(xs[1] + xs[2]) / 2}" y="${Y0 - 20}" text-anchor="middle" font-size="12.5" fill="${C.crimsonText}">${colNames[1]}</text>`;
+  out += `<text x="${(xs[0] + xs[1]) / 2}" y="${Y0 - 6}" text-anchor="middle" font-size="11" fill="${C.crimsonText}">q = ${fr(q)}</text>`;
+  out += `<text x="${(xs[1] + xs[2]) / 2}" y="${Y0 - 6}" text-anchor="middle" font-size="11" fill="${C.crimsonText}">1−q = ${fr(1 - q)}</text>`;
+  out += `<text x="${X0 - 8}" y="${(ys[0] + ys[1]) / 2 - 2}" text-anchor="end" font-size="12.5" fill="${C.blueText}">${rowNames[0]}</text>`;
+  out += `<text x="${X0 - 8}" y="${(ys[0] + ys[1]) / 2 + 12}" text-anchor="end" font-size="11" fill="${C.blueText}">p = ${fr(p)}</text>`;
+  out += `<text x="${X0 - 8}" y="${(ys[1] + ys[2]) / 2 - 2}" text-anchor="end" font-size="12.5" fill="${C.blueText}">${rowNames[1]}</text>`;
+  out += `<text x="${X0 - 8}" y="${(ys[1] + ys[2]) / 2 + 12}" text-anchor="end" font-size="11" fill="${C.blueText}">1−p = ${fr(1 - p)}</text>`;
   return out + "</svg>";
 }
 
@@ -231,7 +231,7 @@ export function simplexSVG(names, probs) {
     out += `<circle cx="${V[k][0]}" cy="${V[k][1]}" r="4" fill="${C.ink}"/>`;
     out += `<text x="${lab[k][0]}" y="${lab[k][1]}" text-anchor="${lab[k][2]}" font-size="13" fill="${C.ink}">${n} (pure)</text>`;
   });
-  out += `<circle cx="${P[0]}" cy="${P[1]}" r="7" fill="${C.crimson}" stroke="white" stroke-width="2"/>`;
+  out += `<circle cx="${P[0]}" cy="${P[1]}" r="7" fill="${C.crimson}" stroke="${C.cream}" stroke-width="2"/>`;
   return out + "</svg>";
 }
 
@@ -241,7 +241,11 @@ export function simplexSVG(names, probs) {
 //   feuille       : {pay: [g1, g2, ...]}
 // ---------------------------------------------------------------------------
 
-const PCOL = {1: C.indigo, 2: C.crimson, 3: C.olive};
+// Joueurs 1, 2, 3 : aplat du noeud, et couleur du chiffre pose dessus. Le chiffre
+// est en 19 px gras, taille « grand texte » du WCAG (seuil 3:1) : creme sur
+// bleu 3,9, creme sur rouge 4,7, encre sur vert 5,6.
+const PCOL = {1: C.blue, 2: C.crimson, 3: C.green};
+const PLAB = {1: C.cream, 2: C.cream, 3: C.ink};
 
 // Backward induction. Travaille sur une copie. Un noeud a pour hauteur h le
 // nombre de decisions qui le separent de ses feuilles les plus lointaines.
@@ -307,16 +311,16 @@ export function treeSVG(tree, step = 0) {
     const dash = resolved && !chosen ? `stroke-dasharray="4,4"` : "";
     out += `<line x1="${e.from.x}" y1="${e.from.y}" x2="${e.to.x}" y2="${e.to.y}" stroke="${stroke}" stroke-width="${sw}" ${dash}/>`;
     const lx = e.from.x + (e.to.x - e.from.x) * 0.52, ly = e.from.y + (e.to.y - e.from.y) * 0.52 - 7;
-    out += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12.5" fill="${resolved && !chosen ? C.mute : C.ink}" style="paint-order:stroke;stroke:white;stroke-width:4px">${e.a}</text>`;
+    out += `<text x="${lx}" y="${ly}" text-anchor="middle" font-size="12.5" fill="${resolved && !chosen ? C.mute : C.ink}" style="paint-order:stroke;stroke:${C.cream};stroke-width:4px">${e.a}</text>`;
   }
   for (const n of nodes) {
     if (n.pay) {
       out += `<text x="${n.x + 10}" y="${n.y + 4.5}" font-size="14" fill="${C.ink}">(${n.pay.map(num).join(" ; ")})</text>`;
     } else {
-      out += `<circle cx="${n.x}" cy="${n.y}" r="12" fill="${PCOL[n.who]}" stroke="white" stroke-width="2"/>`;
-      out += `<text x="${n.x}" y="${n.y + 4.5}" text-anchor="middle" font-size="13" fill="white" font-weight="600">${n.who}</text>`;
+      out += `<circle cx="${n.x}" cy="${n.y}" r="14" fill="${PCOL[n.who]}" stroke="${C.cream}" stroke-width="2"/>`;
+      out += `<text x="${n.x}" y="${n.y + 6.5}" text-anchor="middle" font-size="19" fill="${PLAB[n.who]}" font-weight="600">${n.who}</text>`;
       if (solvable && n.h <= step)
-        out += `<text x="${n.x}" y="${n.y - 18}" text-anchor="middle" font-size="12.5" fill="${C.olive}" font-weight="600" style="paint-order:stroke;stroke:white;stroke-width:4px">↦ (${n.val.map(num).join(" ; ")})</text>`;
+        out += `<text x="${n.x}" y="${n.y - 20}" text-anchor="middle" font-size="12.5" fill="${C.greenText}" font-weight="600" style="paint-order:stroke;stroke:${C.cream};stroke-width:4px">↦ (${n.val.map(num).join(" ; ")})</text>`;
     }
   }
   return out + "</svg>";
@@ -398,7 +402,7 @@ export function augmenteTable(A, B, rowNames, colNames, p, q, {underline = true}
   const cell = (i, j) => {
     const [a, b] = G[i][j];
     const ur = underline && a >= maxCol(j) - EPS_EGAL, uc = underline && b >= maxRow(i) - EPS_EGAL;
-    const A_ = ur ? `<span style="border-bottom:2px solid ${C.indigo}">${f2(a)}</span>` : f2(a);
+    const A_ = ur ? `<span style="border-bottom:2px solid ${C.blue}">${f2(a)}</span>` : f2(a);
     const B_ = uc ? `<span style="border-bottom:2px solid ${C.crimson}">${f2(b)}</span>` : f2(b);
     const mix = (i === 2 || j === 2) ? `background:${C.cream};` : "";
     const gold = ur && uc && i === 2 && j === 2 ? `background:${C.gold}88;` : "";
@@ -407,8 +411,8 @@ export function augmenteTable(A, B, rowNames, colNames, p, q, {underline = true}
   const head = cn.map((n, j) => `<th style="padding:.3rem .7rem;text-align:center;font-weight:${j === 2 ? 400 : 600}">${n}</th>`).join("");
   const body = rn.map((n, i) => `<tr><th style="padding:.3rem .7rem;text-align:right;font-weight:${i === 2 ? 400 : 600}">${n}</th>${[0, 1, 2].map(j => cell(i, j)).join("")}</tr>`).join("");
   return `<table style="font-family:Jost,sans-serif;font-size:.92rem;border-collapse:collapse;margin:.4rem 0">
-    <tr><th></th><th colspan="3" style="text-align:center;color:${C.crimson};font-weight:500">Joueur 2</th></tr>
-    <tr><th style="color:${C.indigo};font-weight:500;text-align:right">Joueur 1</th>${head}</tr>${body}</table>`;
+    <tr><th></th><th colspan="3" style="text-align:center;color:${C.crimsonText};font-weight:500">Joueur 2</th></tr>
+    <tr><th style="color:${C.blueText};font-weight:500;text-align:right">Joueur 1</th>${head}</tr>${body}</table>`;
 }
 
 // ---------------------------------------------------------------------------
