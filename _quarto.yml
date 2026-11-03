@@ -54,6 +54,12 @@ website:
     left: "Visual identity after the data portraits made by W.E.B. Du Bois and his team of Atlanta University students and alumni for the 1900 Paris Exposition. Decorative figures drawn from Insee data (Licence Ouverte 2.0)."
     right: "Built with [Quarto](https://quarto.org)"
 
+# Marque en mode clair seulement. Sans cette ligne, Quarto applique _brand.yml
+# aux deux modes et livre sur chaque page une feuille "sombre" de 500 Ko aux
+# memes couleurs, que rien n'utilise. Le site n'a pas de mode sombre.
+brand:
+  light: _brand.yml
+
 format:
   html:
     # brand = applique _brand.yml. styles.scss = les quelques reglages en plus.

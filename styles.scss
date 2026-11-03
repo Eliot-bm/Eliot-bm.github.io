@@ -87,6 +87,12 @@ div.quarto-post .listing-categories .listing-category,
 }
 .quarto-title .quarto-categories .quarto-category { font-size: 0.75rem; }
 
+// Pastilles des listes : Quarto les met a 0,65em du conteneur, que la regle
+// .listing-categories ci-dessus reduit deja a 0,8rem, d'ou 8,8 px. On fixe la
+// taille en rem, comme les pastilles en tete de page.
+div.quarto-post .listing-categories .listing-category,
+.quarto-grid-item .listing-categories .listing-category { font-size: 0.75rem; }
+
 // --- Bloc "News" de la home --------------------------------------------
 .news-item {
   border-left: 4px solid var(--brand-gold);
@@ -100,6 +106,9 @@ div.quarto-post .listing-categories .listing-category,
   color: var(--brand-ink);
   a { color: var(--brand-crimson-ink); }
 }
+// Quarto partage le pied en trois colonnes egales ; le credit Du Bois, a
+// gauche, tenait sur six lignes etroites. La colonne centrale est vide.
+.nav-footer-left { flex-grow: 3; }
 
 // --- Applications interactives des pages de TD --------------------------
 // La colonne de texte est bornee a 34rem (voir plus bas) : ce conteneur
@@ -218,6 +227,10 @@ img.plate {
   // Portrait de la home : il remplissait tout le premier ecran, et la
   // question de recherche passait sous la ligne de flottaison.
   .quarto-about-trestles .about-image { max-width: 9rem; }
+
+  // Un tableau plus large que l'ecran defile dans son cadre, au lieu de faire
+  // defiler toute la page de cote (simultane.qmd : 470 px dans 375).
+  main table.table { display: block; overflow-x: auto; }
 }
 
 @media print {
