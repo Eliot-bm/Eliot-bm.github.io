@@ -39,8 +39,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      # Versions des actions : toutes sous Node 24 (Node 20 deprecie, avertissement
+      # du run du 2026-11-23). Verifiees sur les pages de release le 2026-11-24.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -62,16 +64,18 @@ jobs:
           echo "Pages HTML générées : $(find _site -name '*.html' | wc -l)"
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        # Depuis la v4, les fichiers caches (.nojekyll, ...) sont exclus de l'archive.
+        # Sans effet ici : _site n'en contient aucun, et Pages via Actions ne lance pas Jekyll.
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       - name: Link check
         # Non bloquant : les liens externes tombent pour des raisons qui ne te concernent pas
